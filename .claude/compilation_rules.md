@@ -19,14 +19,14 @@ OUTPUT "Student name is ", StudentName
 To assign a value to a variable (the value can be the result of a process or a calculation):
 
 ```
-Counter ← 1
-Counter ← Counter + 1
-MyChar ← "A"
-LetterValue ← ASC(MyChar)
-StudentMark ← 40
-Percentage ← (StudentMark / 80) * 100
-Oldstring ← "Your mark is"
-NewString ← OldString & " ninety-seven"
+Counter <- 1
+Counter <- Counter + 1
+MyChar <- "A"
+LetterValue <- ASC(MyChar)
+StudentMark <- 40
+Percentage <- (StudentMark / 80) * 100
+Oldstring <- "Your mark is"
+NewString <- OldString & " ninety-seven"
 ```
 
 ## CONDITIONALS (IF, THEN, ELSE)
@@ -58,20 +58,20 @@ CASE statements when there are multiple choices or multiple choices and an alter
 ### CASE – multiple choices
 ```
 CASE OF Direction
-  "N": Y ← Y + 1
-  "S": Y ← Y – 1
-  "E": X ← X + 1
-  "W": X ← X – 1
+  "N": Y <- Y + 1
+  "S": Y <- Y – 1
+  "E": X <- X + 1
+  "W": X <- X – 1
 ENDCASE
 ```
 
 ### CASE – multiple choices with alternative
 ```
 CASE OF Direction
-  "N": Y ← Y + 1
-  "S": Y ← Y – 1
-  "E": X ← X + 1
-  "W": X ← X – 1
+  "N": Y <- Y + 1
+  "S": Y <- Y – 1←
+  "E": X <- X + 1
+  "W": X <- X – 1
   OTHERWISE : OUTPUT "Error"
 ENDCASE
 ```
@@ -91,17 +91,17 @@ Relational operators used in pseudocode selection statements:
 - A FOR loop has a fixed number of repeats, the STEP increment is an optional expression that must be a whole number
 - To perform iteration using FOR loops:
     ```
-    FOR Counter ← 1 TO 10 STEP 2
+    FOR Counter <- 1 TO 10 STEP 2
       OUTPUT Counter
     NEXT Counter
     ```
     or
     ```
-    Total ← 0
-    FOR Counter ← 1 TO 10
+    Total <- 0
+    FOR Counter <- 1 TO 10
       OUTPUT "Enter a number "
       INPUT Number
-      Total ← Total + Number
+      Total <- Total + Number
     NEXT Counter
     OUTPUT "The total is ", Total
     ```
@@ -118,7 +118,7 @@ Relational operators used in pseudocode selection statements:
 ## LOOPS (WHILE ENDWHILE)
 - Statements in a WHILE loop may sometimes not be executed.
     ```
-    Number ← 0
+    Number <- 0
     WHILE Number >= 0 DO
       OUTPUT "Please enter a negative number "
       INPUT Number
@@ -147,7 +147,7 @@ DECLARE <identifier> : <data type>
 ## CONSTANTS
 - A constant is a data item that cannot be changed during the execution of a program.
 ```
-CONSTANT pi ← 3.142
+CONSTANT pi <- 3.142
 ```
 
 ## RECORDS
@@ -184,8 +184,8 @@ be declared in the usual way: `DECLARE Book : TbookRecord`
 For example:
 
     ```
-    Book.author ← "David Watson"
-    Book.fiction ← FALSE
+    Book.author <- "David Watson"
+    Book.fiction <- FALSE
     ```
   
 ## ARRAYS
@@ -199,7 +199,7 @@ these elements can be accessed using the same identifier name.
     DECLARE <identifier> : ARRAY[LB:UB] OF <data type>
     ```
 - For example: `DECLARE myList : ARRAY[0:8] OF INTEGER`
-- The declared array can then be used, as follows: `myList[7] ← 16`
+- The declared array can then be used, as follows: `myList[7] <- 16`
 
 ### 2D Arrays
 - A 2D array can be referred to as a table, with rows and columns.
@@ -207,7 +207,7 @@ these elements can be accessed using the same identifier name.
     DECLARE <identifier> : ARRAY[LBR:UBR, LBC:UBC] OF <data type>
     ```
 - For example: `DECLARE myArray : ARRAY[0:8,0:2] OF INTEGER`
-- The declared array can then be used, as follows: `myArray[7,0] ← 16`
+- The declared array can then be used, as follows: `myArray[7,0] <- 16`
 
 
 ## FILE OPEN
