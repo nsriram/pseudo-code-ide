@@ -77,3 +77,17 @@
 .compileButton:hover {
   opacity: 0.85;
 }
+
+/* ── Tablet portrait (≤ 768px) ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .toolbar {
+    padding: 0.5rem 0.75rem;
+    justify-content: stretch;
+  }
+
+  .compileButton {
+    width: 100%;
+    text-align: center;
+    padding: 0.6rem 1rem;
+  }
+}

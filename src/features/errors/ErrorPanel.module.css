@@ -82,3 +82,14 @@
   font-size: 0.85rem;
   color: #cdd6f4;
 }
+
+/* ── Tablet portrait (≤ 768px) ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .body {
+    padding: 0.5rem;
+  }
+
+  .errorList {
+    gap: 0.35rem;
+  }
+}

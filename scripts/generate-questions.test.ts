@@ -13,20 +13,20 @@ interface Question {
 }
 
 describe('questions.json', () => {
-  it('contains exactly 25 questions', () => {
-    expect(questions).toHaveLength(25)
+  it('contains exactly 50 questions', () => {
+    expect(questions).toHaveLength(50)
   })
 
-  it('contains 10 simple questions', () => {
-    expect(questions.filter((q) => q.difficulty === 'simple')).toHaveLength(10)
+  it('contains 20 simple questions', () => {
+    expect(questions.filter((q) => q.difficulty === 'simple')).toHaveLength(20)
   })
 
-  it('contains 10 intermediate questions', () => {
-    expect(questions.filter((q) => q.difficulty === 'intermediate')).toHaveLength(10)
+  it('contains 20 intermediate questions', () => {
+    expect(questions.filter((q) => q.difficulty === 'intermediate')).toHaveLength(20)
   })
 
-  it('contains 5 complex questions', () => {
-    expect(questions.filter((q) => q.difficulty === 'complex')).toHaveLength(5)
+  it('contains 10 complex questions', () => {
+    expect(questions.filter((q) => q.difficulty === 'complex')).toHaveLength(10)
   })
 
   it('all questions have unique ids', () => {
@@ -55,10 +55,20 @@ describe('questions.json', () => {
     expect(q.ask.trim().length).toBeGreaterThan(10)
   })
 
-  it('ids follow the q001–q025 format', () => {
-    const idPattern = /^q0[0-2]\d$/
+  it.each(questions as Question[])('question $id has a multi-sentence context', (q) => {
+    expect(q.context.trim().length).toBeGreaterThan(30)
+  })
+
+  it('ids follow the q001–q050 format', () => {
+    const idPattern = /^q0[0-4]\d$|^q050$/
     questions.forEach((q) => {
       expect(q.id).toMatch(idPattern)
     })
+  })
+
+  it('questions are ordered by id', () => {
+    const ids = questions.map((q) => q.id)
+    const sorted = [...ids].sort()
+    expect(ids).toEqual(sorted)
   })
 })
