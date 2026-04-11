@@ -66,6 +66,18 @@ test.describe('Pseudocode IDE', () => {
       await page.getByRole('button', { name: /compile/i }).click()
       await expect(page.getByText(/no errors found/i)).toBeVisible()
     })
+
+    test('accepts <- as assignment operator (ASCII alternative to ←)', async ({ page }) => {
+      const code = [
+        'DECLARE counter : INTEGER',
+        'counter <- 0',
+        'counter <- counter + 1',
+        'OUTPUT counter',
+      ].join('\n')
+      await page.getByRole('textbox').fill(code)
+      await page.getByRole('button', { name: /compile/i }).click()
+      await expect(page.getByText(/no errors found/i)).toBeVisible()
+    })
   })
 
   test.describe('Compile — lexer errors', () => {
@@ -123,8 +135,14 @@ test.describe('Pseudocode IDE', () => {
       await expect(page.getByText('Semantic')).toBeVisible()
     })
 
-    test('shows error for constant reassignment', async ({ page }) => {
+    test('shows error for constant reassignment using ←', async ({ page }) => {
       await page.getByRole('textbox').fill('CONSTANT pi ← 3.14\npi ← 3')
+      await page.getByRole('button', { name: /compile/i }).click()
+      await expect(page.getByText("Cannot assign to constant 'pi'")).toBeVisible()
+    })
+
+    test('shows error for constant reassignment using <-', async ({ page }) => {
+      await page.getByRole('textbox').fill('CONSTANT pi <- 3.14\npi <- 3')
       await page.getByRole('button', { name: /compile/i }).click()
       await expect(page.getByText("Cannot assign to constant 'pi'")).toBeVisible()
     })
