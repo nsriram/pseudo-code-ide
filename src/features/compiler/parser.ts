@@ -37,6 +37,7 @@ export function parse(tokens: Token[]): ParseResult {
   }
 
   function advance(): Token {
+    // eslint-disable-next-line security/detect-object-injection -- pos is a compiler-controlled numeric index, not user input
     const t = toks[pos]
     pos++
     return t

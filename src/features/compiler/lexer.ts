@@ -273,6 +273,7 @@ export function tokenize(source: string): LexerResult {
     }
     if (peek() in singleChar) {
       const ch = advance()
+      // eslint-disable-next-line security/detect-object-injection -- keys are single chars from a closed literal map, not user input
       tokens.push(makeToken(singleChar[ch], ch, tokenLine, tokenCol))
       continue
     }
@@ -308,6 +309,7 @@ export function tokenize(source: string): LexerResult {
         word += advance()
       }
       const upper = word.toUpperCase()
+      // eslint-disable-next-line security/detect-object-injection -- key is an uppercased identifier from source text, looked up in a closed keyword table
       const kwType = KEYWORDS[upper]
       tokens.push(makeToken(kwType ?? 'IDENTIFIER', word, tokenLine, tokenCol))
       continue

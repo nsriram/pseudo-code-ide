@@ -4,10 +4,12 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import prettierConfig from 'eslint-config-prettier'
+import pluginSecurity from 'eslint-plugin-security'
+import pluginNoUnsanitized from 'eslint-plugin-no-unsanitized'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'coverage']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -15,6 +17,8 @@ export default defineConfig([
       tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
+      pluginSecurity.configs.recommended,
+      pluginNoUnsanitized.configs.recommended,
       prettierConfig,
     ],
     languageOptions: {
