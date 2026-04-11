@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "generate:questions": "tsx scripts/generate-questions.ts",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -37,6 +38,7 @@
     "globals": "^17.4.0",
     "jsdom": "^27.0.1",
     "prettier": "^3.8.2",
+    "tsx": "^4.21.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.0",
     "vite": "^8.0.4",
