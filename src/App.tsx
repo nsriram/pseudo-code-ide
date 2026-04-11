@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuestion } from './features/questions/useQuestion'
-import { QuestionPanel } from './features/questions/QuestionPanel'
+import { NewQuestionBar, QuestionContent } from './features/questions/QuestionPanel'
 import { PseudocodeEditor } from './features/editor/PseudocodeEditor'
 import { ErrorPanel } from './features/errors/ErrorPanel'
 import type { CompileError } from './features/compiler/index'
@@ -21,9 +21,12 @@ export default function App() {
 
   return (
     <div className={styles.layout}>
-      <header className={styles.top}>
-        <QuestionPanel question={question} onNext={nextQuestion} />
-      </header>
+      <div className={styles.newQuestionBar}>
+        <NewQuestionBar onNext={nextQuestion} />
+      </div>
+      <div className={styles.questionContent}>
+        <QuestionContent question={question} />
+      </div>
       <main className={styles.bottom}>
         <div className={styles.editorPane}>
           <PseudocodeEditor

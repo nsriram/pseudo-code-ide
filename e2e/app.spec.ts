@@ -5,10 +5,9 @@ test.describe('Pseudocode IDE', () => {
     await page.goto('/')
   })
 
-  test.describe('Top section — Question display', () => {
+  test.describe('Question display', () => {
     test('loads with a question title visible', async ({ page }) => {
-      const title = page.locator('header').getByText(/.+/)
-      await expect(title.first()).toBeVisible()
+      await expect(page.getByTestId('question-title')).toBeVisible()
     })
 
     test('shows the New Question button', async ({ page }) => {
@@ -16,10 +15,22 @@ test.describe('Pseudocode IDE', () => {
     })
 
     test('clicking New Question changes the displayed question', async ({ page }) => {
-      const titleBefore = await page.locator('header span').nth(1).textContent()
+      const titleBefore = await page.getByTestId('question-title').textContent()
       await page.getByRole('button', { name: /new question/i }).click()
-      const titleAfter = await page.locator('header span').nth(1).textContent()
+      const titleAfter = await page.getByTestId('question-title').textContent()
       expect(titleAfter).not.toBe(titleBefore)
+    })
+
+    test('New Question button is always visible (not scrolled away)', async ({ page }) => {
+      await expect(page.getByRole('button', { name: /new question/i })).toBeVisible()
+      // Fill editor with many lines to simulate scrolling
+      await page.getByRole('textbox').fill(Array(30).fill('OUTPUT "hello"').join('\n'))
+      await expect(page.getByRole('button', { name: /new question/i })).toBeVisible()
+    })
+
+    test('Compile button is always visible (not scrolled away)', async ({ page }) => {
+      await page.getByRole('textbox').fill(Array(30).fill('OUTPUT "hello"').join('\n'))
+      await expect(page.getByRole('button', { name: /compile/i })).toBeVisible()
     })
   })
 
