@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Test artefacts
+test-results/
+playwright-report/
+coverage/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Claude — machine-specific local settings and memory
+.claude/settings.local.json
+.claude/memory/
+
+# Beads — local database state and ephemeral files
+.beads/dolt/
+.beads/ephemeral.sqlite3*
+.beads/.sync.lock
+.beads/.jsonl.lock
+.beads/sync_base.jsonl
+.beads/export-state/
+.beads/last-touched
+.beads/.local_version

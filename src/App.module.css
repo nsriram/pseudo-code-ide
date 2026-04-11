@@ -1,0 +1,44 @@
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #181825;
+  color: #cdd6f4;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.top {
+  flex-shrink: 0;
+  height: 15vh;
+  min-height: 80px;
+}
+
+.bottom {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.editorPane {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.errorPane {
+  width: 320px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-left: 1px solid #313244;
+}

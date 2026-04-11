@@ -1,0 +1,23 @@
+[
+  {
+    "id": "q001",
+    "difficulty": "simple",
+    "title": "Sum of Two Numbers",
+    "context": "A student needs a program to add two numbers together.",
+    "ask": "Write pseudocode to input two integers, calculate their sum, and output the result."
+  },
+  {
+    "id": "q002",
+    "difficulty": "intermediate",
+    "title": "Count Odd and Even",
+    "context": "A procedure Count() will:\n1. Input a value (all values will be positive integers)\n2. Count the number of odd values and the number of even values\n3. Repeat from step 1 until the value input is 99\n4. Output the two count values with a suitable message.",
+    "ask": "Write pseudocode for the procedure Count(). The value 99 must not be counted."
+  },
+  {
+    "id": "q003",
+    "difficulty": "complex",
+    "title": "Delete Leading Spaces",
+    "context": "A teacher is designing a program to process pseudocode projects written by her students. Each student project is stored in a text file.\n\nThe DeleteSpaces module:\n- Is called with a parameter of type STRING representing a line of pseudocode\n- Returns the line after removing any leading space characters\n\nExample:\n- Before: \"   IF X2 > 13 THEN\"\n- After:  \"IF X2 > 13 THEN\"",
+    "ask": "Complete the pseudocode for module DeleteSpaces().\n`FUNCTION DeleteSpaces(Line : STRING) RETURNS STRING`"
+  }
+]

@@ -1,0 +1,42 @@
+import { useState } from 'react'
+import { useQuestion } from './features/questions/useQuestion'
+import { QuestionPanel } from './features/questions/QuestionPanel'
+import { PseudocodeEditor } from './features/editor/PseudocodeEditor'
+import { ErrorPanel } from './features/errors/ErrorPanel'
+import type { CompileError } from './features/compiler/index'
+import { compile } from './features/compiler/index'
+import styles from './App.module.css'
+
+export default function App() {
+  const { question, nextQuestion } = useQuestion()
+  const [code, setCode] = useState('')
+  const [errors, setErrors] = useState<CompileError[]>([])
+
+  function handleCompile() {
+    const result = compile(code)
+    setErrors(result.errors)
+  }
+
+  const errorLines = new Set(errors.map((e) => e.line))
+
+  return (
+    <div className={styles.layout}>
+      <header className={styles.top}>
+        <QuestionPanel question={question} onNext={nextQuestion} />
+      </header>
+      <main className={styles.bottom}>
+        <div className={styles.editorPane}>
+          <PseudocodeEditor
+            value={code}
+            onChange={setCode}
+            onCompile={handleCompile}
+            errorLines={errorLines}
+          />
+        </div>
+        <div className={styles.errorPane}>
+          <ErrorPanel errors={errors} />
+        </div>
+      </main>
+    </div>
+  )
+}
