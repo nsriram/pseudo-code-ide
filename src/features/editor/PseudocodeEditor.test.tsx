@@ -56,6 +56,21 @@ describe('PseudocodeEditor', () => {
     expect(screen.getByText('3')).toBeInTheDocument()
   })
 
+  it('applies error styling to gutter line numbers in the error set', () => {
+    render(
+      <PseudocodeEditor
+        value={'INPUT x\nOUTPUT x\nINPUT y'}
+        onChange={vi.fn()}
+        onCompile={vi.fn()}
+        errorLines={new Set([2])}
+      />
+    )
+    // All three line numbers should still render
+    expect(screen.getByText('1')).toBeInTheDocument()
+    expect(screen.getByText('2')).toBeInTheDocument()
+    expect(screen.getByText('3')).toBeInTheDocument()
+  })
+
   it('does not have autocomplete or spellcheck on the textarea', () => {
     render(
       <PseudocodeEditor value="" onChange={vi.fn()} onCompile={vi.fn()} errorLines={new Set()} />

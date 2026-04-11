@@ -128,6 +128,125 @@ describe('validator', () => {
     })
   })
 
+  describe('CASE OF statement', () => {
+    it('validates CASE OF without errors', () => {
+      const src = [
+        'DECLARE dir : STRING',
+        'dir ← "N"',
+        'CASE OF dir',
+        '  "N": OUTPUT "North"',
+        '  "S": OUTPUT "South"',
+        '  OTHERWISE: OUTPUT "Unknown"',
+        'ENDCASE',
+      ].join('\n')
+      expect(check(src)).toHaveLength(0)
+    })
+
+    it('reports error for undeclared variable in CASE subject', () => {
+      const msgs = errorMessages('CASE OF unknown\n  1: OUTPUT "x"\nENDCASE')
+      expect(msgs).toContain("Variable 'unknown' used before declaration")
+    })
+
+    it('reports error for undeclared variable used in CASE clause', () => {
+      const msgs = errorMessages('DECLARE x : INTEGER\nx ← 1\nCASE OF x\n  1: OUTPUT undeclaredVar\nENDCASE')
+      expect(msgs).toContain("Variable 'undeclaredVar' used before declaration")
+    })
+  })
+
+  describe('FOR loop with STEP', () => {
+    it('validates FOR loop with STEP without errors', () => {
+      const src = 'FOR i ← 1 TO 10 STEP 2\n  OUTPUT i\nNEXT i'
+      expect(check(src)).toHaveLength(0)
+    })
+  })
+
+  describe('TYPE declaration', () => {
+    it('reports error for duplicate TYPE declaration', () => {
+      const src = 'TYPE\nTBook\n  DECLARE title : STRING\nENDTYPE\nTYPE\nTBook\n  DECLARE title : STRING\nENDTYPE'
+      const msgs = errorMessages(src)
+      expect(msgs.some((m) => /already declared/i.test(m))).toBe(true)
+    })
+  })
+
+  describe('calling non-procedure identifiers', () => {
+    it('reports error when calling a variable as a procedure', () => {
+      const msgs = errorMessages('DECLARE x : INTEGER\nCALL x')
+      expect(msgs).toContain("'x' is not a procedure")
+    })
+  })
+
+  describe('duplicate function declaration', () => {
+    it('reports error for duplicate function declaration', () => {
+      const src = [
+        'FUNCTION Double(n : INTEGER)',
+        '  RETURNS INTEGER',
+        '  RETURN n * 2',
+        'ENDFUNCTION',
+        'FUNCTION Double(n : INTEGER)',
+        '  RETURNS INTEGER',
+        '  RETURN n * 2',
+        'ENDFUNCTION',
+      ].join('\n')
+      const msgs = errorMessages(src)
+      expect(msgs.some((m) => /already declared/i.test(m))).toBe(true)
+    })
+  })
+
+  describe('file operations', () => {
+    it('validates OPENFILE without errors', () => {
+      const src = 'DECLARE filename : STRING\nfilename ← "data.txt"\nOPEN filename FOR READ'
+      expect(check(src)).toHaveLength(0)
+    })
+
+    it('validates READFILE without errors', () => {
+      const src = [
+        'DECLARE filename : STRING',
+        'DECLARE line : STRING',
+        'filename ← "data.txt"',
+        'OPEN filename FOR READ',
+        'READFILE filename, line',
+        'CLOSEFILE filename',
+      ].join('\n')
+      expect(check(src)).toHaveLength(0)
+    })
+
+    it('reports error for READFILE with undeclared variable', () => {
+      const src = 'DECLARE filename : STRING\nfilename ← "f.txt"\nREADFILE filename, undeclaredVar'
+      const msgs = errorMessages(src)
+      expect(msgs).toContain("Variable 'undeclaredVar' used before declaration")
+    })
+
+    it('validates WRITEFILE without errors', () => {
+      const src = [
+        'DECLARE filename : STRING',
+        'DECLARE data : STRING',
+        'filename ← "out.txt"',
+        'data ← "hello"',
+        'OPEN filename FOR WRITE',
+        'WRITEFILE filename, data',
+        'CLOSEFILE filename',
+      ].join('\n')
+      expect(check(src)).toHaveLength(0)
+    })
+
+    it('validates CLOSEFILE without errors', () => {
+      const src = 'DECLARE filename : STRING\nfilename ← "data.txt"\nOPEN filename FOR READ\nCLOSEFILE filename'
+      expect(check(src)).toHaveLength(0)
+    })
+  })
+
+  describe('array access', () => {
+    it('validates array access without errors', () => {
+      const src = 'DECLARE scores : ARRAY[1:5] OF INTEGER\nOUTPUT scores[1]'
+      expect(check(src)).toHaveLength(0)
+    })
+
+    it('reports error for undeclared array access', () => {
+      const msgs = errorMessages('OUTPUT noSuchArray[0]')
+      expect(msgs).toContain("Array 'noSuchArray' used before declaration")
+    })
+  })
+
   describe('valid programs', () => {
     it('validates a complete program without errors', () => {
       const src = [
