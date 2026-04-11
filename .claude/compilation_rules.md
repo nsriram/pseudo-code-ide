@@ -69,7 +69,7 @@ ENDCASE
 ```
 CASE OF Direction
   "N": Y <- Y + 1
-  "S": Y <- Y – 1←
+  "S": Y <- Y – 1
   "E": X <- X + 1
   "W": X <- X – 1
   OTHERWISE : OUTPUT "Error"
