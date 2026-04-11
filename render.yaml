@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: pseudo-code-ide
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    # Render sets $PORT automatically; the container reads it via envsubst
