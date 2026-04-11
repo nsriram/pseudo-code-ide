@@ -160,6 +160,35 @@ describe('lexer', () => {
       expect(tokens[1]).toMatchObject({ type: 'ASSIGN', value: '←' })
     })
 
+    it('tokenizes <- as ASSIGN', () => {
+      const { tokens } = tokenize('x <- 1')
+      expect(tokens[1]).toMatchObject({ type: 'ASSIGN', value: '<-' })
+    })
+
+    it('<- and ← produce the same ASSIGN token type', () => {
+      const { tokens: t1 } = tokenize('x <- 1')
+      const { tokens: t2 } = tokenize('x ← 1')
+      expect(t1[1].type).toBe(t2[1].type)
+    })
+
+    it('<- does not interfere with <> (NOT_EQUALS)', () => {
+      const { tokens } = tokenize('x <> y')
+      expect(tokens[1]).toMatchObject({ type: 'NOT_EQUALS', value: '<>' })
+    })
+
+    it('<- does not interfere with <= (LESS_EQ)', () => {
+      const { tokens } = tokenize('x <= y')
+      expect(tokens[1]).toMatchObject({ type: 'LESS_EQ', value: '<=' })
+    })
+
+    it('tokenizes a full assignment statement using <-', () => {
+      const { tokens, errors } = tokenize('Counter <- Counter + 1')
+      expect(errors).toHaveLength(0)
+      expect(tokens[0]).toMatchObject({ type: 'IDENTIFIER', value: 'Counter' })
+      expect(tokens[1]).toMatchObject({ type: 'ASSIGN', value: '<-' })
+      expect(tokens[2]).toMatchObject({ type: 'IDENTIFIER', value: 'Counter' })
+    })
+
     it('tokenizes typographic dash –', () => {
       const { tokens } = tokenize('x – 1')
       expect(tokens[1]).toMatchObject({ type: 'DASH' })

@@ -222,10 +222,15 @@ export function tokenize(source: string): LexerResult {
       continue
     }
 
-    // Assignment arrow ← (UTF-8: U+2190)
+    // Assignment arrow ← (UTF-8: U+2190) or <- (ASCII alternative)
     if (peek() === '←') {
       advance()
       tokens.push(makeToken('ASSIGN', '←', tokenLine, tokenCol))
+      continue
+    }
+    if (peek() === '<' && peek(1) === '-') {
+      advance(); advance()
+      tokens.push(makeToken('ASSIGN', '<-', tokenLine, tokenCol))
       continue
     }
 
