@@ -31,7 +31,6 @@ export type TokenType =
   | 'TYPE'
   | 'ENDTYPE'
   | 'ARRAY'
-  | 'OF'
   | 'OPEN'
   | 'READFILE'
   | 'WRITEFILE'

@@ -9,6 +9,10 @@ test-results/
 playwright-report/
 coverage/
 
+# Generated reports
+eslint-report.json
+public/report/
+
 # IDE
 .idea/
 .vscode/

@@ -136,7 +136,50 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  # ── 5. Docker image ──────────────────────────────────────────────────────────
+  # ── 5. Code quality report → GitHub Pages ───────────────────────────────────
+  report:
+    name: Quality Report
+    runs-on: ubuntu-latest
+    needs: lint
+    # Publish on every push to main so the report stays current
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate ESLint JSON report
+        run: npm run lint:report
+
+      - name: Build HTML report
+        run: npm run report:generate
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public/report/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # ── 6. Docker image ──────────────────────────────────────────────────────────
   docker:
     name: Docker Image
     runs-on: ubuntu-latest

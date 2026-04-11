@@ -370,7 +370,6 @@ const questions: Question[] = [
 // ── Write output ─────────────────────────────────────────────────────────────
 
 const outputPath = resolve(import.meta.dirname, '../src/features/questions/questions.json')
-// eslint-disable-next-line security/detect-non-literal-fs-filename -- path is resolved from import.meta.dirname, not user input
 writeFileSync(outputPath, JSON.stringify(questions, null, 2) + '\n')
 
 const counts = questions.reduce<Record<string, number>>((acc, q) => {

@@ -12,6 +12,7 @@ export interface Question {
 function pickRandom(current: Question): Question {
   const others = (questions as Question[]).filter((q) => q.id !== current.id)
   const pool = others.length > 0 ? others : (questions as Question[])
+  // eslint-disable-next-line sonarjs/pseudo-random -- intentional: question selection does not require cryptographic randomness
   return pool[Math.floor(Math.random() * pool.length)]
 }
 
