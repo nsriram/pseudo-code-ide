@@ -1,6 +1,7 @@
 # Pseudocode IDE
 
 [![CI](https://github.com/nsriram/pseudo-code-ide/actions/workflows/ci.yml/badge.svg)](https://github.com/nsriram/pseudo-code-ide/actions/workflows/ci.yml)
+[![Quality Report](https://img.shields.io/badge/quality-report-blue)](https://nsriram.github.io/pseudo-code-ide/)
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://pseudo-code-ide.onrender.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -48,7 +49,9 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 | Command | Description |
 |---|---|
 | `npm run build` | Production build (output in `dist/`) |
-| `npm run lint` | ESLint with security plugins |
+| `npm run lint` | ESLint with security, accessibility, and code-quality plugins |
+| `npm run lint:report` | ESLint JSON output → `eslint-report.json` |
+| `npm run report:generate` | Convert `eslint-report.json` → HTML dashboard (`public/report/`) |
 | `npm test` | Run unit tests (Vitest) |
 | `npm run test:coverage` | Unit tests with coverage report |
 | `npm run test:e2e` | End-to-end tests (Playwright) |
@@ -114,7 +117,8 @@ pseudo-code-ide/
 │   ├── App.tsx
 │   └── main.tsx
 ├── scripts/
-│   └── generate-questions.ts   # Question bank generator
+│   ├── generate-questions.ts   # Question bank generator
+│   └── generate-report.ts      # ESLint JSON → HTML quality dashboard
 ├── e2e/                         # Playwright end-to-end tests
 ├── sample_questions/            # Reference Cambridge exam questions
 ├── .claude/                     # Claude Code config and pseudocode compilation rules
@@ -125,13 +129,42 @@ pseudo-code-ide/
 
 ---
 
+## CI/CD Pipeline
+
+GitHub Actions runs on every push and pull request to `main`:
+
+```
+push / PR
+  │
+  ├─ 1. Lint ──────────────────────────────── ESLint (security, a11y, sonarjs, react)
+  │        │
+  │        ├─ 2. Build ──────────────────────── tsc + vite build → uploads dist/ artifact
+  │        ├─ 3. Test ───────────────────────── Vitest unit tests (364 tests)
+  │        └─ 5. Quality Report (main only) ──── ESLint HTML dashboard → GitHub Pages
+  │
+  ├─ 4. E2E (needs: Build + Test) ──────────── Playwright against Docker container
+  │
+  └─ 6. Docker Image (main only, needs: E2E) ── build + push to ghcr.io
+```
+
+| Stage | Trigger | What it does |
+|---|---|---|
+| Lint | every push/PR | ESLint with react, jsx-a11y, security, no-unsanitized, sonarjs plugins |
+| Build | after lint | TypeScript compile + Vite build; uploads `dist/` as artifact |
+| Test | after lint | Vitest unit tests |
+| E2E | after build+test | Playwright tests run against the production Docker image |
+| Quality Report | `main` push | Generates HTML quality dashboard, deploys to [GitHub Pages](https://nsriram.github.io/pseudo-code-ide/) |
+| Docker Image | `main` push | Builds multi-stage Docker image and pushes to `ghcr.io` |
+
+All actions run on Node.js 24 native runners (no deprecation warnings).
+
 ## Deployment
 
 The app is deployed on [Render](https://render.com) as a Docker web service.
 
-- **CI/CD**: GitHub Actions runs lint → build → test on every push and PR. On merge to `main`, the Docker image is built and pushed to `ghcr.io`.
-- **Hosting**: Render pulls the Docker image and serves it via nginx on the free tier.
+- **Hosting**: Render pulls the Docker image from `ghcr.io` and serves it via nginx on the free tier.
 - **Config**: `render.yaml` defines the service; `nginx.conf` handles SPA routing and cache headers.
+- **Quality report**: Published automatically on every `main` push at [nsriram.github.io/pseudo-code-ide](https://nsriram.github.io/pseudo-code-ide/).
 
 ---
 
