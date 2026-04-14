@@ -133,6 +133,35 @@ test.describe('Pseudocode IDE', () => {
     })
   })
 
+  test.describe('New Question — state reset', () => {
+    test('clicking New Question clears the editor', async ({ page }) => {
+      await page.getByRole('textbox').fill('OUTPUT x')
+      await page.getByRole('button', { name: /new question/i }).click()
+      await expect(page.getByRole('textbox')).toHaveValue('')
+    })
+
+    test('clicking New Question resets output panel after a compile with errors', async ({ page }) => {
+      await page.getByRole('textbox').fill('OUTPUT undeclaredVar')
+      await page.getByRole('button', { name: /compile/i }).click()
+      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
+      await page.getByRole('button', { name: /new question/i }).click()
+      await expect(page.getByText(/no errors found/i)).toBeVisible()
+    })
+
+    test('clicking New Question resets output panel after a clean compile', async ({ page }) => {
+      const code = 'DECLARE x : INTEGER\nINPUT x\nOUTPUT x'
+      await page.getByRole('textbox').fill(code)
+      await page.getByRole('button', { name: /compile/i }).click()
+      await expect(page.getByText(/no errors found/i)).toBeVisible()
+      // compile again with error to change state, then new question should reset
+      await page.getByRole('textbox').fill('OUTPUT undeclaredVar')
+      await page.getByRole('button', { name: /compile/i }).click()
+      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
+      await page.getByRole('button', { name: /new question/i }).click()
+      await expect(page.getByText(/no errors found/i)).toBeVisible()
+    })
+  })
+
   test.describe('Compile — validator errors', () => {
     test('shows error for undeclared variable', async ({ page }) => {
       await page.getByRole('textbox').fill('OUTPUT undeclaredVar')

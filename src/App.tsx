@@ -17,12 +17,18 @@ export default function App() {
     setErrors(result.errors)
   }
 
+  function handleNewQuestion() {
+    nextQuestion()
+    setCode('')
+    setErrors([])
+  }
+
   const errorLines = new Set(errors.map((e) => e.line))
 
   return (
     <div className={styles.layout}>
       <div className={styles.newQuestionBar}>
-        <NewQuestionBar onNext={nextQuestion} />
+        <NewQuestionBar onNext={handleNewQuestion} />
       </div>
       <div className={styles.questionContent}>
         <QuestionContent question={question} />

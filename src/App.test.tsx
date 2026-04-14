@@ -45,4 +45,22 @@ describe('App', () => {
     const titleAfter = screen.getByTestId('question-title').textContent
     expect(titleAfter).not.toBe(titleBefore)
   })
+
+  it('clicking New Question clears the editor', async () => {
+    render(<App />)
+    await userEvent.type(screen.getByRole('textbox'), 'OUTPUT x')
+    await userEvent.click(screen.getByRole('button', { name: /new question/i }))
+    expect(screen.getByRole('textbox')).toHaveValue('')
+  })
+
+  it('clicking New Question resets the output panel after a compilation', async () => {
+    render(<App />)
+    // compile something with an error so the output panel has content
+    await userEvent.type(screen.getByRole('textbox'), 'OUTPUT undeclared')
+    await userEvent.click(screen.getByRole('button', { name: /compile/i }))
+    expect(screen.queryByText(/no errors found/i)).not.toBeInTheDocument()
+    // now click New Question — output should reset to the idle state
+    await userEvent.click(screen.getByRole('button', { name: /new question/i }))
+    expect(screen.getByText(/no errors found/i)).toBeInTheDocument()
+  })
 })
