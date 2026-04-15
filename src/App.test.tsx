@@ -28,14 +28,14 @@ describe('App', () => {
     render(<App />)
     await userEvent.type(screen.getByRole('textbox'), 'DECLARE x : INTEGER\nINPUT x\nOUTPUT x')
     await userEvent.click(screen.getByRole('button', { name: /compile/i }))
-    expect(screen.getByText(/no errors found/i)).toBeInTheDocument()
+    expect(screen.getByText(/no syntax errors found/i)).toBeInTheDocument()
   })
 
   it('compiling invalid code shows an error', async () => {
     render(<App />)
     await userEvent.type(screen.getByRole('textbox'), 'OUTPUT undeclared')
     await userEvent.click(screen.getByRole('button', { name: /compile/i }))
-    expect(screen.queryByText(/no errors found/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/no syntax errors found/i)).not.toBeInTheDocument()
   })
 
   it('clicking New Question changes the displayed question', async () => {
@@ -56,7 +56,7 @@ describe('App', () => {
   it('shows idle prompt before any compilation', () => {
     render(<App />)
     expect(screen.getByText(/write your pseudocode/i)).toBeInTheDocument()
-    expect(screen.queryByText(/no errors found/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/no syntax errors found/i)).not.toBeInTheDocument()
   })
 
   it('clicking New Question resets the output panel to idle after a compilation', async () => {
@@ -64,11 +64,11 @@ describe('App', () => {
     // compile something with an error so the output panel has content
     await userEvent.type(screen.getByRole('textbox'), 'OUTPUT undeclared')
     await userEvent.click(screen.getByRole('button', { name: /compile/i }))
-    expect(screen.queryByText(/no errors found/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/no syntax errors found/i)).not.toBeInTheDocument()
     // now click New Question — output should reset to the idle state (not "no errors found")
     await userEvent.click(screen.getByRole('button', { name: /new question/i }))
     expect(screen.getByText(/write your pseudocode/i)).toBeInTheDocument()
-    expect(screen.queryByText(/no errors found/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/no syntax errors found/i)).not.toBeInTheDocument()
   })
 
   describe('Run Tests', () => {

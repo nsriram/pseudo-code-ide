@@ -6,6 +6,7 @@ export type { CompileError }
 interface Props {
   errors: CompileError[]
   hasCompiled: boolean
+  hasTestCases?: boolean
 }
 
 const SOURCE_LABEL: Record<CompileError['source'], string> = {
@@ -14,12 +15,20 @@ const SOURCE_LABEL: Record<CompileError['source'], string> = {
   validator: 'Semantic',
 }
 
-function PanelBody({ errors, hasCompiled }: Props) {
+function PanelBody({ errors, hasCompiled, hasTestCases }: Props) {
   if (!hasCompiled) {
     return <p className={styles.idle}>Write your pseudocode and click Compile.</p>
   }
   if (errors.length === 0) {
-    return <p className={styles.success}>No errors found.</p>
+    const hint = hasTestCases
+      ? 'Click Run Tests to check your solution.'
+      : 'Manually verify your output matches the expected result.'
+    return (
+      <>
+        <p className={styles.success}>No syntax errors found.</p>
+        <p className={styles.hint}>{hint}</p>
+      </>
+    )
   }
   return (
     <ul className={styles.errorList}>
@@ -38,7 +47,7 @@ function PanelBody({ errors, hasCompiled }: Props) {
   )
 }
 
-export function ErrorPanel({ errors, hasCompiled }: Props) {
+export function ErrorPanel({ errors, hasCompiled, hasTestCases }: Props) {
   return (
     <div className={styles.panel}>
       <div className={styles.header}>
@@ -50,7 +59,7 @@ export function ErrorPanel({ errors, hasCompiled }: Props) {
         )}
       </div>
       <div className={styles.body}>
-        <PanelBody errors={errors} hasCompiled={hasCompiled} />
+        <PanelBody errors={errors} hasCompiled={hasCompiled} hasTestCases={hasTestCases} />
       </div>
     </div>
   )

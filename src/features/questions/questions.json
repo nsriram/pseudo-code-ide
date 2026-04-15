@@ -107,14 +107,23 @@
     "difficulty": "simple",
     "title": "Swap Two Variables",
     "context": "A sorting algorithm requires a utility that can exchange the values stored in two variables.\nThe swap must use a temporary variable so that no data is lost.",
-    "ask": "Write pseudocode to input two numbers into variables A and B, swap their values using a temporary variable, and output the new values of A and B."
+    "ask": "Write pseudocode to input two numbers into variables A and B, swap their values using a temporary variable, and output the new values of A and B.",
+    "testCases": [
+      { "inputs": ["3", "7"], "expected": "7", "label": "A becomes 7 after swap" },
+      { "inputs": ["3", "7"], "expected": "3", "label": "B becomes 3 after swap" }
+    ]
   },
   {
     "id": "q011",
     "difficulty": "simple",
     "title": "Sphere Volume and Surface Area",
     "context": "A physics simulation requires calculations for spherical objects.\nFor a sphere of radius r:\n  Volume        = (4 / 3) × π × r³\n  Surface Area  = 4 × π × r²\nUse the value 3.14159 for π.",
-    "ask": "Write pseudocode to input a radius, then calculate and output both the volume and the surface area of the sphere."
+    "ask": "Write pseudocode to input a radius, then calculate and output both the volume and the surface area of the sphere.",
+    "testCases": [
+      { "inputs": ["1"], "expected": "4.18879", "label": "r=1 → volume ≈ 4.189" },
+      { "inputs": ["1"], "expected": "12.56637", "label": "r=1 → surface area ≈ 12.566" },
+      { "inputs": ["2"], "expected": "33.51032", "label": "r=2 → volume ≈ 33.510" }
+    ]
   },
   {
     "id": "q012",
@@ -134,7 +143,12 @@
     "difficulty": "simple",
     "title": "Ticket Price Calculator",
     "context": "A cinema charges the following ticket prices:\n- Adults (age 18 and over): $12.00\n- Children (age under 18): $7.50\n- Senior citizens (age 65 and over): $6.00\nThe program inputs the customer's age and outputs the correct ticket price.",
-    "ask": "Write pseudocode to input a customer's age and output the appropriate ticket price."
+    "ask": "Write pseudocode to input a customer's age and output the appropriate ticket price.",
+    "testCases": [
+      { "inputs": ["25"], "expected": "12", "label": "Adult (25) → $12.00" },
+      { "inputs": ["10"], "expected": "7.5", "label": "Child (10) → $7.50" },
+      { "inputs": ["70"], "expected": "6", "label": "Senior (70) → $6.00" }
+    ]
   },
   {
     "id": "q014",
@@ -153,7 +167,12 @@
     "difficulty": "simple",
     "title": "BMI Calculator",
     "context": "A health application calculates Body Mass Index (BMI).\nBMI is calculated using the formula:\n  BMI = weight (kg) / (height (m))²\n\nBMI categories:\n- Underweight: BMI < 18.5\n- Normal:      18.5 ≤ BMI < 25\n- Overweight:  25 ≤ BMI < 30\n- Obese:       BMI ≥ 30",
-    "ask": "Write pseudocode to input a person's weight (kg) and height (m), calculate their BMI, and output both the BMI value and the corresponding category."
+    "ask": "Write pseudocode to input a person's weight (kg) and height (m), calculate their BMI, and output both the BMI value and the corresponding category.",
+    "testCases": [
+      { "inputs": ["70", "1.75"], "expected": "Normal", "label": "70kg/1.75m → Normal (BMI≈22.9)" },
+      { "inputs": ["50", "1.75"], "expected": "Underweight", "label": "50kg/1.75m → Underweight (BMI≈16.3)" },
+      { "inputs": ["90", "1.75"], "expected": "Overweight", "label": "90kg/1.75m → Overweight (BMI≈29.4)" }
+    ]
   },
   {
     "id": "q016",
@@ -194,7 +213,12 @@
     "difficulty": "simple",
     "title": "Electricity Bill",
     "context": "An electricity supplier charges customers based on the number of units used:\n- First 100 units:          $0.10 per unit\n- Units 101 to 300:         $0.15 per unit\n- Units above 300:          $0.20 per unit\nA fixed standing charge of $5.00 is added to every bill.",
-    "ask": "Write pseudocode to input the number of units used and output the total electricity bill."
+    "ask": "Write pseudocode to input the number of units used and output the total electricity bill.",
+    "testCases": [
+      { "inputs": ["50"], "expected": "10", "label": "50 units → $10.00 (50×0.10 + $5)" },
+      { "inputs": ["150"], "expected": "22.5", "label": "150 units → $22.50" },
+      { "inputs": ["350"], "expected": "55", "label": "350 units → $55.00" }
+    ]
   },
   {
     "id": "q020",

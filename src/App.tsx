@@ -60,7 +60,7 @@ export default function App() {
           />
         </div>
         <div className={styles.errorPane}>
-          <ErrorPanel errors={errors ?? []} hasCompiled={errors !== null} />
+          <ErrorPanel errors={errors ?? []} hasCompiled={errors !== null} hasTestCases={canRunTests} />
           {evalResults !== null && <EvaluationPanel results={evalResults} />}
         </div>
       </main>

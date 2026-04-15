@@ -17,9 +17,19 @@ describe('ErrorPanel', () => {
   })
 
   describe('after compilation (hasCompiled=true)', () => {
-    it('shows success message when there are no errors', () => {
+    it('shows syntax-only success message when there are no errors', () => {
       render(<ErrorPanel errors={[]} hasCompiled={true} />)
-      expect(screen.getByText(/no errors found/i)).toBeInTheDocument()
+      expect(screen.getByText(/no syntax errors found/i)).toBeInTheDocument()
+    })
+
+    it('shows "manually verify" hint when hasTestCases is false', () => {
+      render(<ErrorPanel errors={[]} hasCompiled={true} hasTestCases={false} />)
+      expect(screen.getByText(/manually verify/i)).toBeInTheDocument()
+    })
+
+    it('shows "click run tests" hint when hasTestCases is true', () => {
+      render(<ErrorPanel errors={[]} hasCompiled={true} hasTestCases={true} />)
+      expect(screen.getByText(/click run tests/i)).toBeInTheDocument()
     })
 
     it('does not show idle prompt after compilation', () => {

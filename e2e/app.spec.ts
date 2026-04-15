@@ -63,7 +63,7 @@ test.describe('Pseudocode IDE', () => {
 
     test('shows idle prompt before compiling', async ({ page }) => {
       await expect(page.getByText(/write your pseudocode/i)).toBeVisible()
-      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
+      await expect(page.getByText(/no syntax errors found/i)).not.toBeVisible()
     })
   })
 
@@ -76,7 +76,7 @@ test.describe('Pseudocode IDE', () => {
       ].join('\n')
       await page.getByRole('textbox').fill(code)
       await page.getByRole('button', { name: /compile/i }).click()
-      await expect(page.getByText(/no errors found/i)).toBeVisible()
+      await expect(page.getByText(/no syntax errors found/i)).toBeVisible()
     })
 
     test('accepts <- as assignment operator (ASCII alternative to ←)', async ({ page }) => {
@@ -88,7 +88,7 @@ test.describe('Pseudocode IDE', () => {
       ].join('\n')
       await page.getByRole('textbox').fill(code)
       await page.getByRole('button', { name: /compile/i }).click()
-      await expect(page.getByText(/no errors found/i)).toBeVisible()
+      await expect(page.getByText(/no syntax errors found/i)).toBeVisible()
     })
   })
 
@@ -142,7 +142,7 @@ test.describe('Pseudocode IDE', () => {
 
     test('compiling with no code does not show success message', async ({ page }) => {
       await page.getByRole('button', { name: /compile/i }).click()
-      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
+      await expect(page.getByText(/no syntax errors found/i)).not.toBeVisible()
     })
   })
 
@@ -156,7 +156,7 @@ test.describe('Pseudocode IDE', () => {
     test('accepts mis-cased primitive type names without error', async ({ page }) => {
       await page.getByRole('textbox').fill('DECLARE n1 : integer')
       await page.getByRole('button', { name: /compile/i }).click()
-      await expect(page.getByText(/no errors found/i)).toBeVisible()
+      await expect(page.getByText(/no syntax errors found/i)).toBeVisible()
     })
   })
 
@@ -170,20 +170,20 @@ test.describe('Pseudocode IDE', () => {
     test('clicking New Question resets output panel to idle after a compile with errors', async ({ page }) => {
       await page.getByRole('textbox').fill('OUTPUT undeclaredVar')
       await page.getByRole('button', { name: /compile/i }).click()
-      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
+      await expect(page.getByText(/no syntax errors found/i)).not.toBeVisible()
       await page.getByRole('button', { name: /new question/i }).click()
       await expect(page.getByText(/write your pseudocode/i)).toBeVisible()
-      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
+      await expect(page.getByText(/no syntax errors found/i)).not.toBeVisible()
     })
 
     test('clicking New Question resets output panel to idle after a clean compile', async ({ page }) => {
       const code = 'DECLARE x : INTEGER\nINPUT x\nOUTPUT x'
       await page.getByRole('textbox').fill(code)
       await page.getByRole('button', { name: /compile/i }).click()
-      await expect(page.getByText(/no errors found/i)).toBeVisible()
+      await expect(page.getByText(/no syntax errors found/i)).toBeVisible()
       await page.getByRole('button', { name: /new question/i }).click()
       await expect(page.getByText(/write your pseudocode/i)).toBeVisible()
-      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
+      await expect(page.getByText(/no syntax errors found/i)).not.toBeVisible()
     })
   })
 

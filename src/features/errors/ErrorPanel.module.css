@@ -43,6 +43,12 @@
   margin: 0;
 }
 
+.hint {
+  color: #585b70;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
 .errorList {
   list-style: none;
   margin: 0;
