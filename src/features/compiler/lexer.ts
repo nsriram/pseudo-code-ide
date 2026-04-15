@@ -66,6 +66,11 @@ export type TokenType =
   | 'MINUS'
   | 'MULTIPLY'
   | 'DIVIDE'
+  | 'DIV'           // integer division
+  | 'MOD'           // modulo
+  | 'AND'
+  | 'OR'
+  | 'NOT'
   | 'AMPERSAND'     // & (string concat)
   | 'COLON'
   | 'COMMA'
@@ -136,6 +141,12 @@ const KEYWORDS: Record<string, TokenType> = {
   // Boolean literals
   TRUE: 'BOOLEAN_LITERAL',
   FALSE: 'BOOLEAN_LITERAL',
+  // Operators (keyword form)
+  DIV: 'DIV',
+  MOD: 'MOD',
+  AND: 'AND',
+  OR: 'OR',
+  NOT: 'NOT',
   // Built-in functions
   LENGTH: 'LENGTH',
   LEFT: 'LEFT',

@@ -4,10 +4,11 @@ interface Props {
   value: string
   onChange: (value: string) => void
   onCompile: () => void
+  onRunTests?: () => void
   errorLines: Set<number>
 }
 
-export function PseudocodeEditor({ value, onChange, onCompile, errorLines }: Props) {
+export function PseudocodeEditor({ value, onChange, onCompile, onRunTests, errorLines }: Props) {
   const lines = value.split('\n')
 
   return (
@@ -38,6 +39,11 @@ export function PseudocodeEditor({ value, onChange, onCompile, errorLines }: Pro
         <button className={styles.compileButton} onClick={onCompile}>
           Compile
         </button>
+        {onRunTests && (
+          <button className={styles.runTestsButton} onClick={onRunTests}>
+            Run Tests
+          </button>
+        )}
       </div>
     </div>
   )

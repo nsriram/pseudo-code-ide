@@ -14,11 +14,13 @@ export interface CompileError {
 
 export interface CompileResult {
   errors: CompileError[]
+  program: import('./ast').Program | null
 }
 
 export function compile(source: string): CompileResult {
   if (source.trim() === '') {
     return {
+      program: null,
       errors: [
         {
           line: 1,
@@ -51,5 +53,5 @@ export function compile(source: string): CompileResult {
     }
   }
 
-  return { errors }
+  return { errors, program: errors.length === 0 ? program : null }
 }

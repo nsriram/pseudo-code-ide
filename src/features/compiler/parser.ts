@@ -73,7 +73,27 @@ export function parse(tokens: Token[]): ParseResult {
   // ── Expressions ────────────────────────────────────────────────────────────
 
   function parseExpression(): Expression {
-    return parseComparison()
+    return parseLogicalOr()
+  }
+
+  function parseLogicalOr(): Expression {
+    let left = parseLogicalAnd()
+    while (check('OR')) {
+      const op = advance()
+      const right = parseLogicalAnd()
+      left = { kind: 'BinaryExpr', operator: 'OR', left, right, line: op.line, column: op.column } as BinaryExpr
+    }
+    return left
+  }
+
+  function parseLogicalAnd(): Expression {
+    let left = parseComparison()
+    while (check('AND')) {
+      const op = advance()
+      const right = parseComparison()
+      left = { kind: 'BinaryExpr', operator: 'AND', left, right, line: op.line, column: op.column } as BinaryExpr
+    }
+    return left
   }
 
   function parseComparison(): Expression {
@@ -112,10 +132,11 @@ export function parse(tokens: Token[]): ParseResult {
 
   function parseMulDiv(): Expression {
     let left = parseUnary()
-    while (check('MULTIPLY') || check('DIVIDE')) {
+    while (check('MULTIPLY') || check('DIVIDE') || check('DIV') || check('MOD')) {
       const op = advance()
+      const operator = op.type === 'DIVIDE' ? '/' : op.value.toUpperCase()
       const right = parseUnary()
-      left = { kind: 'BinaryExpr', operator: op.value, left, right, line: op.line, column: op.column } as BinaryExpr
+      left = { kind: 'BinaryExpr', operator, left, right, line: op.line, column: op.column } as BinaryExpr
     }
     return left
   }
@@ -125,6 +146,11 @@ export function parse(tokens: Token[]): ParseResult {
       const op = advance()
       const operand = parseUnary()
       return { kind: 'UnaryExpr', operator: '-', operand, line: op.line, column: op.column } as UnaryExpr
+    }
+    if (check('NOT')) {
+      const op = advance()
+      const operand = parseUnary()
+      return { kind: 'UnaryExpr', operator: 'NOT', operand, line: op.line, column: op.column } as UnaryExpr
     }
     return parsePostfix()
   }

@@ -1,0 +1,85 @@
+.panel {
+  border-top: 1px solid #313244;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #cdd6f4;
+  margin-bottom: 8px;
+}
+
+.badgePass {
+  background: #a6e3a1;
+  color: #1e1e2e;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badgeFail {
+  background: #f38ba8;
+  color: #1e1e2e;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pass,
+.fail {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.pass {
+  background: rgba(166, 227, 161, 0.1);
+}
+
+.fail {
+  background: rgba(243, 139, 168, 0.1);
+}
+
+.icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.pass .icon {
+  color: #a6e3a1;
+}
+
+.fail .icon {
+  color: #f38ba8;
+}
+
+.label {
+  font-weight: 600;
+  color: #cdd6f4;
+  flex-shrink: 0;
+}
+
+.detail {
+  color: #a6adc8;
+  font-size: 0.75rem;
+  word-break: break-word;
+}

@@ -70,4 +70,44 @@ describe('App', () => {
     expect(screen.getByText(/write your pseudocode/i)).toBeInTheDocument()
     expect(screen.queryByText(/no errors found/i)).not.toBeInTheDocument()
   })
+
+  describe('Run Tests', () => {
+    const validSolution = [
+      'DECLARE a : INTEGER',
+      'DECLARE b : INTEGER',
+      'INPUT a',
+      'INPUT b',
+      'OUTPUT a + b',
+    ].join('\n')
+
+    it('Run Tests button is not visible before compiling', () => {
+      render(<App />)
+      expect(screen.queryByRole('button', { name: /run tests/i })).not.toBeInTheDocument()
+    })
+
+    it('Run Tests button appears after successful compile on a question with test cases', async () => {
+      render(<App />)
+      await userEvent.type(screen.getByRole('textbox'), validSolution)
+      await userEvent.click(screen.getByRole('button', { name: /compile/i }))
+      expect(screen.getByRole('button', { name: /run tests/i })).toBeVisible()
+    })
+
+    it('clicking Run Tests shows evaluation panel', async () => {
+      render(<App />)
+      await userEvent.type(screen.getByRole('textbox'), validSolution)
+      await userEvent.click(screen.getByRole('button', { name: /compile/i }))
+      await userEvent.click(screen.getByRole('button', { name: /run tests/i }))
+      expect(screen.getByText('Tests')).toBeVisible()
+    })
+
+    it('clicking New Question removes test results', async () => {
+      render(<App />)
+      await userEvent.type(screen.getByRole('textbox'), validSolution)
+      await userEvent.click(screen.getByRole('button', { name: /compile/i }))
+      await userEvent.click(screen.getByRole('button', { name: /run tests/i }))
+      expect(screen.getByText('Tests')).toBeVisible()
+      await userEvent.click(screen.getByRole('button', { name: /new question/i }))
+      expect(screen.queryByText('Tests')).not.toBeInTheDocument()
+    })
+  })
 })

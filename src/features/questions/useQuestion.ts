@@ -1,12 +1,19 @@
 import { useState } from 'react'
 import questions from './questions.json'
 
+export interface TestCase {
+  inputs: string[]
+  expected: string
+  label?: string
+}
+
 export interface Question {
   id: string
   difficulty: 'simple' | 'intermediate' | 'complex'
   title: string
   context: string
   ask: string
+  testCases?: TestCase[]
 }
 
 function pickRandom(current: Question): Question {
