@@ -188,8 +188,30 @@ describe('interpreter', () => {
   })
 
   describe('built-in functions', () => {
-    it('LENGTH', () => {
+    it('LENGTH of string literal', () => {
       expect(run('OUTPUT LENGTH("hello")').output).toBe('5')
+    })
+
+    it('LENGTH of a declared STRING variable', () => {
+      const src = 'DECLARE s : STRING\nINPUT s\nOUTPUT LENGTH(s)'
+      expect(run(src, ['Cambridge']).output).toBe('9')
+    })
+
+    it('LENGTH used in FOR loop bound', () => {
+      const src = [
+        'DECLARE s : STRING',
+        'DECLARE i : INTEGER',
+        'INPUT s',
+        'FOR i ← 1 TO LENGTH(s)',
+        '  OUTPUT MID(s, i, 1)',
+        'NEXT i',
+      ].join('\n')
+      expect(run(src, ['abc']).output).toBe('a\nb\nc')
+    })
+
+    it('LENGTH assigned to INTEGER variable', () => {
+      const src = 'DECLARE s : STRING\nDECLARE n : INTEGER\nINPUT s\nn ← LENGTH(s)\nOUTPUT n'
+      expect(run(src, ['hi']).output).toBe('2')
     })
 
     it('LEFT', () => {
