@@ -1,6 +1,7 @@
 import type { Token, TokenType } from './lexer'
 import type {
   Program, Statement, Expression, DataType,
+  BinaryOperator,
   PrimitiveType, ArrayType, NamedType,
   Literal, Identifier, BinaryExpr, UnaryExpr, FunctionCall, ArrayAccess, RecordAccess,
   InputStatement, OutputStatement, AssignStatement,
@@ -152,7 +153,17 @@ export function parse(tokens: Token[]): ParseResult {
       const operand = parseUnary()
       return { kind: 'UnaryExpr', operator: 'NOT', operand, line: op.line, column: op.column } as UnaryExpr
     }
-    return parsePostfix()
+    return parsePower()
+  }
+
+  function parsePower(): Expression {
+    const base = parsePostfix()
+    if (check('POWER')) {
+      const op = advance()
+      const exp = parseUnary() // right-associative
+      return { kind: 'BinaryExpr', operator: '^' as BinaryOperator, left: base, right: exp, line: op.line, column: op.column } as BinaryExpr
+    }
+    return base
   }
 
   function parsePostfix(): Expression {
@@ -237,9 +248,15 @@ export function parse(tokens: Token[]): ParseResult {
       advance()
       expect('LBRACKET', 'Expected "[" after ARRAY')
       const bounds: { lower: Expression; upper: Expression }[] = []
-      bounds.push({ lower: parseExpression(), upper: (expect('COLON'), parseExpression()) })
+      const lower0 = parseExpression()
+      expect('COLON', 'Expected ":" in array bounds')
+      const upper0 = parseExpression()
+      bounds.push({ lower: lower0, upper: upper0 })
       while (match('COMMA')) {
-        bounds.push({ lower: parseExpression(), upper: (expect('COLON'), parseExpression()) })
+        const lo = parseExpression()
+        expect('COLON', 'Expected ":" in array bounds')
+        const hi = parseExpression()
+        bounds.push({ lower: lo, upper: hi })
       }
       expect('RBRACKET', 'Expected "]" after array bounds')
       expect('OF', 'Expected OF after array bounds')
@@ -350,6 +367,14 @@ export function parse(tokens: Token[]): ParseResult {
     const clauses: CaseClause[] = []
     let otherwise: Statement[] = []
 
+    function isNextClauseStart(): boolean {
+      const t0 = peek(0)
+      const t1 = peek(1)
+      const valueTypes: TokenType[] = ['INTEGER_LITERAL', 'REAL_LITERAL', 'STRING_LITERAL', 'BOOLEAN_LITERAL', 'IDENTIFIER', 'MINUS', 'DASH']
+      return (valueTypes.includes(t0.type) && t1.type === 'COLON') ||
+        t0.type === 'OTHERWISE' || t0.type === 'ENDCASE'
+    }
+
     while (!check('ENDCASE') && pos < toks.length) {
       if (match('OTHERWISE')) {
         expect('COLON', 'Expected ":" after OTHERWISE')
@@ -359,9 +384,11 @@ export function parse(tokens: Token[]): ParseResult {
       }
       const val = parseExpression()
       expect('COLON', 'Expected ":" after case value')
-      // Each clause body is a single statement (Cambridge pseudocode style)
-      const stmt = parseStatement()
-      const body: Statement[] = stmt ? [stmt] : []
+      const body: Statement[] = []
+      while (pos < toks.length && !isNextClauseStart()) {
+        const s = parseStatement()
+        if (s) body.push(s)
+      }
       clauses.push({ value: val, body, line: val.line, column: val.column })
     }
     expect('ENDCASE', 'Expected ENDCASE')
@@ -380,7 +407,7 @@ export function parse(tokens: Token[]): ParseResult {
     const body = parseBlock(['NEXT'])
     expect('NEXT', 'Expected NEXT to close FOR loop')
     // Optional: NEXT variable — consume if present
-    if (check('IDENTIFIER') && peek().value === varTok.value) advance()
+    if (check('IDENTIFIER') && peek().value.toUpperCase() === varTok.value.toUpperCase()) advance()
     return { kind: 'ForStatement', variable: varTok.value, from, to, step, body, line: tok.line, column: tok.column }
   }
 
@@ -486,9 +513,19 @@ export function parse(tokens: Token[]): ParseResult {
     return { kind: 'CallStatement', name: nameTok.value, args, line: tok.line, column: tok.column }
   }
 
+  function canStartExpression(): boolean {
+    const t = peek().type
+    return t === 'INTEGER_LITERAL' || t === 'REAL_LITERAL' ||
+      t === 'STRING_LITERAL' || t === 'BOOLEAN_LITERAL' ||
+      t === 'IDENTIFIER' || t === 'LPAREN' ||
+      t === 'MINUS' || t === 'DASH' || t === 'NOT' ||
+      t === 'LENGTH' || t === 'LEFT' || t === 'RIGHT' ||
+      t === 'MID' || t === 'ASC' || t === 'EOF_FN'
+  }
+
   function parseReturn(): ReturnStatement {
     const tok = advance() // RETURN
-    const value = parseExpression()
+    const value = canStartExpression() ? parseExpression() : null
     return { kind: 'ReturnStatement', value, line: tok.line, column: tok.column }
   }
 

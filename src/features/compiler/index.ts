@@ -46,7 +46,7 @@ export function compile(source: string): CompileResult {
   }
 
   // Only validate if no parse errors — AST may be incomplete otherwise
-  if (parseErrors.length === 0) {
+  if (errors.length === 0) {
     const validationErrors = validate(program)
     for (const e of validationErrors) {
       errors.push({ ...e, severity: 'error', source: 'validator' })

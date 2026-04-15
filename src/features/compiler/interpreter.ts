@@ -6,7 +6,7 @@ import type {
 } from './ast'
 import {
   Environment, Runtime, ReturnSignal, RuntimeError,
-  type PseudoValue, type PseudoCallable,
+  type PseudoValue, type PseudoCallable, type PseudoRecord,
 } from './runtime'
 
 // ── Expression evaluation ─────────────────────────────────────────────────────
@@ -38,16 +38,16 @@ function evalExpr(expr: Expression, env: Environment, rt: Runtime): PseudoValue 
         throw new RuntimeError(`'${expr.name}' is not an array`)
       }
       const pseudoArr = arr as import('./runtime').PseudoArray
-      const key = expr.indices.map((i) => String(evalExpr(i, env, rt))).join(',')
+      const key = expr.indices.map((i) => String(evalExpr(i, env, rt))).join('\x00')
       return pseudoArr.data.get(key) ?? 0
     }
 
     case 'RecordAccess': {
       const rec = env.get(expr.record)
-      if (rec === null || typeof rec !== 'object' || (rec as { kind: string }).kind !== 'array') {
+      if (rec === null || typeof rec !== 'object' || (rec as { kind: string }).kind !== 'record') {
         throw new RuntimeError(`'${expr.record}' is not a record`)
       }
-      const pseudoRec = rec as import('./runtime').PseudoArray
+      const pseudoRec = rec as PseudoRecord
       return pseudoRec.data.get(expr.field) ?? 0
     }
 
@@ -144,7 +144,10 @@ function evalExpr(expr: Expression, env: Environment, rt: Runtime): PseudoValue 
       try {
         executeStatements(callable.body, fnEnv, rt)
       } catch (e) {
-        if (e instanceof ReturnSignal) return e.value
+        if (e instanceof ReturnSignal) {
+          if (e.value === null) throw new RuntimeError(`Function '${expr.name}' did not return a value`)
+          return e.value
+        }
         throw e
       }
       throw new RuntimeError(`Function '${expr.name}' did not return a value`)
@@ -179,6 +182,8 @@ function executeStatement(stmt: Statement, env: Environment, rt: Runtime): void 
         // INTEGER and REAL default to 0 (already set)
       } else if (stmt.dataType.kind === 'ArrayType') {
         defaultVal = { kind: 'array', data: new Map() }
+      } else if (stmt.dataType.kind === 'NamedType') {
+        defaultVal = { kind: 'record', data: new Map() }
       }
       env.define(stmt.name, defaultVal)
       break
@@ -201,15 +206,15 @@ function executeStatement(stmt: Statement, env: Environment, rt: Runtime): void 
         if (arr === null || typeof arr !== 'object' || (arr as { kind: string }).kind !== 'array') {
           throw new RuntimeError(`'${target.name}' is not an array`)
         }
-        const key = target.indices.map((i) => String(evalExpr(i, env, rt))).join(',')
+        const key = target.indices.map((i) => String(evalExpr(i, env, rt))).join('\x00')
         ;(arr as import('./runtime').PseudoArray).data.set(key, val)
       } else {
         // RecordAccess
         const rec = env.get(target.record)
-        if (rec === null || typeof rec !== 'object' || (rec as { kind: string }).kind !== 'array') {
+        if (rec === null || typeof rec !== 'object' || (rec as { kind: string }).kind !== 'record') {
           throw new RuntimeError(`'${target.record}' is not a record`)
         }
-        ;(rec as import('./runtime').PseudoArray).data.set(target.field, val)
+        ;(rec as PseudoRecord).data.set(target.field, val)
       }
       break
     }
@@ -263,6 +268,7 @@ function executeStatement(stmt: Statement, env: Environment, rt: Runtime): void 
       const from = evalExpr(s.from, env, rt) as number
       const to = evalExpr(s.to, env, rt) as number
       const step = s.step ? (evalExpr(s.step, env, rt) as number) : 1
+      if (step === 0) throw new RuntimeError('FOR loop STEP value cannot be zero')
       const loopEnv = new Environment(env)
       loopEnv.define(s.variable, from)
       if (step > 0) {
@@ -345,7 +351,7 @@ function executeStatement(stmt: Statement, env: Environment, rt: Runtime): void 
     }
 
     case 'ReturnStatement':
-      throw new ReturnSignal(evalExpr(stmt.value, env, rt))
+      throw new ReturnSignal(stmt.value !== null ? evalExpr(stmt.value, env, rt) : null)
 
     case 'TypeDecl':
     case 'OpenFileStatement':
@@ -360,6 +366,10 @@ function executeStatement(stmt: Statement, env: Environment, rt: Runtime): void 
 function pseudoToString(val: PseudoValue): string {
   if (typeof val === 'boolean') return val ? 'TRUE' : 'FALSE'
   if (typeof val === 'object' && val.kind === 'array') return '[array]'
+  if (typeof val === 'object' && val.kind === 'record') {
+    const fields = [...val.data.entries()].map(([k, v]) => `${k}: ${pseudoToString(v)}`).join(', ')
+    return `{${fields}}`
+  }
   return String(val)
 }
 

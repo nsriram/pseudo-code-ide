@@ -9,6 +9,8 @@ function check(source: string) {
   return validate(program)
 }
 
+const validateSource = check
+
 function errorMessages(source: string): string[] {
   return check(source).map((e) => e.message)
 }
@@ -68,12 +70,12 @@ describe('validator', () => {
   describe('RETURN outside FUNCTION', () => {
     it('reports error when RETURN used at top level', () => {
       const msgs = errorMessages('DECLARE x : INTEGER\nRETURN x')
-      expect(msgs).toContain('RETURN can only be used inside a FUNCTION')
+      expect(msgs).toContain('RETURN can only be used inside a FUNCTION or PROCEDURE')
     })
 
-    it('reports error when RETURN used inside PROCEDURE', () => {
+    it('reports error when RETURN with value used inside PROCEDURE', () => {
       const msgs = errorMessages('PROCEDURE Foo\n  DECLARE x : INTEGER\n  RETURN x\nENDPROCEDURE')
-      expect(msgs).toContain('RETURN can only be used inside a FUNCTION')
+      expect(msgs).toContain('RETURN with a value can only be used inside a FUNCTION')
     })
 
     it('no error when RETURN used inside FUNCTION', () => {
@@ -322,5 +324,38 @@ describe('validator', () => {
       const src = 'DECLARE x : INTEGER\nREPEAT\n  INPUT x\nUNTIL x > 0'
       expect(check(src)).toHaveLength(0)
     })
+  })
+})
+
+describe('case-insensitive identifiers', () => {
+  it('accepts mixed-case variable name usage', () => {
+    expect(validateSource('DECLARE myVar : INTEGER\nOUTPUT myVar')).toHaveLength(0)
+  })
+  it('accepts uppercase usage of lowercase-declared variable', () => {
+    expect(validateSource('DECLARE myVar : INTEGER\nOUTPUT MYVAR')).toHaveLength(0)
+  })
+})
+
+describe('builtin arity validation', () => {
+  it('errors when LENGTH called with 0 args', () => {
+    expect(validateSource('OUTPUT LENGTH()').some(e => /argument/i.test(e.message))).toBe(true)
+  })
+  it('accepts LENGTH with 1 arg', () => {
+    expect(validateSource('DECLARE s : STRING\nOUTPUT LENGTH(s)')).toHaveLength(0)
+  })
+  it('errors when MID called with 2 args', () => {
+    expect(validateSource('DECLARE s : STRING\nOUTPUT MID(s, 1)').some(e => /argument/i.test(e.message))).toBe(true)
+  })
+})
+
+describe('extended builtins are valid', () => {
+  it('does not report UCASE as undefined', () => {
+    expect(validateSource('DECLARE s : STRING\nOUTPUT UCASE(s)')).toHaveLength(0)
+  })
+  it('does not report ROUND as undefined', () => {
+    expect(validateSource('DECLARE x : REAL\nOUTPUT ROUND(x, 2)')).toHaveLength(0)
+  })
+  it('does not report CHR as undefined', () => {
+    expect(validateSource('OUTPUT CHR(65)')).toHaveLength(0)
   })
 })

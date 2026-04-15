@@ -38,7 +38,7 @@ export function EvaluationPanel({ results }: Props) {
       </header>
       <ul className={styles.list}>
         {results.map((r, i) => (
-          <ResultRow key={i} result={r} index={i} />
+          <ResultRow key={r.label ?? r.inputs.join(':') + i} result={r} index={i} />
         ))}
       </ul>
     </section>

@@ -41,6 +41,16 @@ describe('PseudocodeEditor', () => {
     expect(onCompile).toHaveBeenCalledOnce()
   })
 
+  it('triggers onCompile when Ctrl+Enter is pressed in the textarea', async () => {
+    const onCompile = vi.fn()
+    render(
+      <PseudocodeEditor value="" onChange={vi.fn()} onCompile={onCompile} errorLines={new Set()} />
+    )
+    const textarea = screen.getByRole('textbox')
+    await userEvent.type(textarea, '{Control>}{Enter}{/Control}')
+    expect(onCompile).toHaveBeenCalledOnce()
+  })
+
   it('renders line numbers for each line of code', () => {
     const code = 'INPUT x\nOUTPUT x\nINPUT y'
     render(

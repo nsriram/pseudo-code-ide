@@ -348,3 +348,59 @@ describe('interpreter', () => {
     })
   })
 })
+
+describe('power operator (^)', () => {
+  it('computes 2^10', () => {
+    expect(run('OUTPUT 2 ^ 10').output).toBe('1024')
+  })
+  it('is right-associative: 2^3^2 = 2^9 = 512', () => {
+    expect(run('OUTPUT 2 ^ 3 ^ 2').output).toBe('512')
+  })
+})
+
+describe('FOR STEP 0 guard', () => {
+  it('throws when STEP is 0', () => {
+    const src = 'DECLARE i : INTEGER\nFOR i ← 1 TO 5 STEP 0\n  OUTPUT i\nNEXT i'
+    expect(run(src).error).toMatch(/step.*zero/i)
+  })
+})
+
+describe('// comments in source', () => {
+  it('ignores inline comments', () => {
+    expect(run('OUTPUT 42 // answer').output).toBe('42')
+  })
+})
+
+describe('CASE multi-statement body', () => {
+  it('executes all statements in a CASE clause body', () => {
+    const src = [
+      'DECLARE n : INTEGER',
+      'DECLARE total : INTEGER',
+      'n ← 2',
+      'total ← 0',
+      'CASE OF n',
+      '  2: total ← total + 1',
+      '     total ← total + 1',
+      '  OTHERWISE: total ← 99',
+      'ENDCASE',
+      'OUTPUT total',
+    ].join('\n')
+    expect(run(src).output).toBe('2')
+  })
+})
+
+describe('bare RETURN in procedure', () => {
+  it('exits procedure early without error', () => {
+    const src = [
+      'DECLARE x : INTEGER',
+      'x ← 0',
+      'PROCEDURE doNothing()',
+      '  RETURN',
+      '  x ← 99',
+      'ENDPROCEDURE',
+      'CALL doNothing()',
+      'OUTPUT x',
+    ].join('\n')
+    expect(run(src).output).toBe('0')
+  })
+})

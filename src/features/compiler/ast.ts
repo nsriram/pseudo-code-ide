@@ -6,6 +6,12 @@ export interface Node {
 
 // ── Expressions ──────────────────────────────────────────────────────────────
 
+export type BinaryOperator =
+  | '+' | '-' | '*' | '/' | 'DIV' | 'MOD' | '^'
+  | '=' | '<>' | '<' | '>' | '<=' | '>='
+  | 'AND' | 'OR' | '&'
+export type UnaryOperator = '-' | 'NOT'
+
 export type Expression =
   | Literal
   | Identifier
@@ -28,14 +34,14 @@ export interface Identifier extends Node {
 
 export interface BinaryExpr extends Node {
   kind: 'BinaryExpr'
-  operator: string
+  operator: BinaryOperator
   left: Expression
   right: Expression
 }
 
 export interface UnaryExpr extends Node {
   kind: 'UnaryExpr'
-  operator: string
+  operator: UnaryOperator
   operand: Expression
 }
 
@@ -187,7 +193,7 @@ export interface CallStatement extends Node {
 
 export interface ReturnStatement extends Node {
   kind: 'ReturnStatement'
-  value: Expression
+  value: Expression | null
 }
 
 export interface OpenFileStatement extends Node {

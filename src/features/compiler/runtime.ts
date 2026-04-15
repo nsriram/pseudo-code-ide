@@ -1,11 +1,16 @@
 // ── Runtime types ─────────────────────────────────────────────────────────────
 
-export type PseudoValue = number | boolean | string | PseudoArray
-
 export interface PseudoArray {
   readonly kind: 'array'
   data: Map<string, PseudoValue>
 }
+
+export interface PseudoRecord {
+  readonly kind: 'record'
+  data: Map<string, PseudoValue>
+}
+
+export type PseudoValue = number | boolean | string | PseudoArray | PseudoRecord
 
 export interface PseudoCallable {
   readonly kind: 'callable'
@@ -18,8 +23,8 @@ export interface PseudoCallable {
 // ── Control-flow signals ──────────────────────────────────────────────────────
 
 export class ReturnSignal {
-  readonly value: PseudoValue
-  constructor(value: PseudoValue) { this.value = value }
+  readonly value: PseudoValue | null
+  constructor(value: PseudoValue | null) { this.value = value }
 }
 
 export class RuntimeError extends Error {
@@ -61,8 +66,7 @@ export class Environment {
       this.parent.set(name, value)
       return
     }
-    // Define on first use (handles loop variables and implicit declarations)
-    this.values.set(key, { value, constant: false })
+    throw new RuntimeError(`'${name}' is not defined`)
   }
 
   has(name: string): boolean {

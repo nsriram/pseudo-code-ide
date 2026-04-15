@@ -23,6 +23,7 @@
   background: #181825;
   text-align: right;
   user-select: none;
+  overflow: hidden;
 }
 
 .lineNumber {
@@ -77,22 +78,6 @@
 }
 
 .compileButton:hover {
-  opacity: 0.85;
-}
-
-.runTestsButton {
-  padding: 0.45rem 1.25rem;
-  background: #89b4fa;
-  color: #1e1e2e;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.runTestsButton:hover {
   opacity: 0.85;
 }
 

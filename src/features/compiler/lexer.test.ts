@@ -293,3 +293,37 @@ describe('lexer', () => {
     })
   })
 })
+
+describe('single-line comments (//)', () => {
+  it('ignores comment at end of line', () => {
+    const { tokens } = tokenize('OUTPUT 1 // comment\nOUTPUT 2')
+    const meaningful = tokens.filter(t => t.type !== 'NEWLINE' && t.type !== 'EOF')
+    expect(meaningful.map(t => t.type)).toEqual(['OUTPUT', 'INTEGER_LITERAL', 'OUTPUT', 'INTEGER_LITERAL'])
+  })
+  it('ignores a comment-only line without errors', () => {
+    const { errors } = tokenize('// just a comment')
+    expect(errors).toHaveLength(0)
+  })
+  it('does not treat // inside a string as a comment', () => {
+    const { tokens } = tokenize('OUTPUT "https://x"')
+    expect(tokens.find(t => t.type === 'STRING_LITERAL')?.value).toBe('https://x')
+  })
+})
+
+describe('CHAR literals', () => {
+  it("tokenises 'A' as STRING_LITERAL 'A'", () => {
+    const { tokens } = tokenize("OUTPUT 'A'")
+    expect(tokens.find(t => t.type === 'STRING_LITERAL')?.value).toBe('A')
+  })
+  it('reports error for unterminated char literal', () => {
+    const { errors } = tokenize("c ← 'A")
+    expect(errors[0]?.message).toMatch(/unterminated character literal/i)
+  })
+})
+
+describe('power operator (^)', () => {
+  it('tokenises ^ as POWER', () => {
+    const { tokens } = tokenize('2 ^ 3')
+    expect(tokens.find(t => t.type === 'POWER')).toBeDefined()
+  })
+})

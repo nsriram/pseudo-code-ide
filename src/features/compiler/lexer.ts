@@ -80,6 +80,7 @@ export type TokenType =
   | 'RBRACKET'
   | 'DOT'
   | 'DASH'          // – (typographic minus in pseudocode)
+  | 'POWER'
   // Identifiers
   | 'IDENTIFIER'
   // Special
@@ -190,6 +191,68 @@ export function tokenize(source: string): LexerResult {
     return { type, value, line: tokenLine, column: tokenCol }
   }
 
+  function scanStringLiteral(tokenLine: number, tokenCol: number): void {
+    advance() // consume opening "
+    let str = ''
+    while (pos < source.length && peek() !== '"' && peek() !== '\n') {
+      str += advance()
+    }
+    if (peek() === '"') {
+      advance()
+      tokens.push(makeToken('STRING_LITERAL', str, tokenLine, tokenCol))
+    } else {
+      errors.push({ line: tokenLine, column: tokenCol, message: 'Unterminated string literal' })
+      tokens.push(makeToken('STRING_LITERAL', str, tokenLine, tokenCol))
+    }
+  }
+
+  function scanCharLiteral(): void {
+    const charLine = line; const charCol = col()
+    advance() // consume opening '
+    let ch = ''
+    if (pos < source.length && peek() !== "'" && peek() !== '\n') ch = advance()
+    if (peek() === "'") {
+      advance() // consume closing '
+      tokens.push(makeToken('STRING_LITERAL', ch, charLine, charCol))
+    } else {
+      errors.push({ line: charLine, column: charCol, message: "Unterminated character literal" })
+      tokens.push(makeToken('STRING_LITERAL', ch, charLine, charCol))
+    }
+  }
+
+  function scanNumber(tokenLine: number, tokenCol: number): void {
+    let num = ''
+    while (pos < source.length && peek() >= '0' && peek() <= '9') {
+      num += advance()
+    }
+    if (peek() === '.') {
+      num += advance()
+      while (pos < source.length && peek() >= '0' && peek() <= '9') {
+        num += advance()
+      }
+      tokens.push(makeToken('REAL_LITERAL', num, tokenLine, tokenCol))
+    } else {
+      tokens.push(makeToken('INTEGER_LITERAL', num, tokenLine, tokenCol))
+    }
+  }
+
+  function scanIdentifier(tokenLine: number, tokenCol: number): void {
+    let word = ''
+    while (
+      pos < source.length &&
+      ((peek() >= 'A' && peek() <= 'Z') ||
+        (peek() >= 'a' && peek() <= 'z') ||
+        (peek() >= '0' && peek() <= '9') ||
+        peek() === '_')
+    ) {
+      word += advance()
+    }
+    const upper = word.toUpperCase()
+    // eslint-disable-next-line security/detect-object-injection -- key is an uppercased identifier from source text, looked up in a closed keyword table
+    const kwType = KEYWORDS[upper]
+    tokens.push(makeToken(kwType ?? 'IDENTIFIER', word, tokenLine, tokenCol))
+  }
+
   while (pos < source.length) {
     // Skip spaces and tabs (not newlines)
     if (peek() === ' ' || peek() === '\t') {
@@ -217,18 +280,13 @@ export function tokenize(source: string): LexerResult {
 
     // String literal
     if (peek() === '"') {
-      advance()
-      let str = ''
-      while (pos < source.length && peek() !== '"' && peek() !== '\n') {
-        str += advance()
-      }
-      if (peek() === '"') {
-        advance()
-        tokens.push(makeToken('STRING_LITERAL', str, tokenLine, tokenCol))
-      } else {
-        errors.push({ line: tokenLine, column: tokenCol, message: 'Unterminated string literal' })
-        tokens.push(makeToken('STRING_LITERAL', str, tokenLine, tokenCol))
-      }
+      scanStringLiteral(tokenLine, tokenCol)
+      continue
+    }
+
+    // Character literal 'x' — treated as a single-character STRING_LITERAL
+    if (peek() === "'") {
+      scanCharLiteral()
       continue
     }
 
@@ -268,6 +326,12 @@ export function tokenize(source: string): LexerResult {
       continue
     }
 
+    // Single-line comment (//)
+    if (peek() === '/' && peek(1) === '/') {
+      while (pos < source.length && peek() !== '\n') advance()
+      continue
+    }
+
     // Single-char operators / punctuation
     const singleChar: Record<string, TokenType> = {
       '=': 'EQUALS',
@@ -285,6 +349,7 @@ export function tokenize(source: string): LexerResult {
       '[': 'LBRACKET',
       ']': 'RBRACKET',
       '.': 'DOT',
+      '^': 'POWER',
     }
     if (peek() in singleChar) {
       const ch = advance()
@@ -295,38 +360,13 @@ export function tokenize(source: string): LexerResult {
 
     // Number literal
     if (peek() >= '0' && peek() <= '9') {
-      let num = ''
-      while (pos < source.length && peek() >= '0' && peek() <= '9') {
-        num += advance()
-      }
-      if (peek() === '.') {
-        num += advance()
-        while (pos < source.length && peek() >= '0' && peek() <= '9') {
-          num += advance()
-        }
-        tokens.push(makeToken('REAL_LITERAL', num, tokenLine, tokenCol))
-      } else {
-        tokens.push(makeToken('INTEGER_LITERAL', num, tokenLine, tokenCol))
-      }
+      scanNumber(tokenLine, tokenCol)
       continue
     }
 
     // Identifier or keyword
     if ((peek() >= 'A' && peek() <= 'Z') || (peek() >= 'a' && peek() <= 'z') || peek() === '_') {
-      let word = ''
-      while (
-        pos < source.length &&
-        ((peek() >= 'A' && peek() <= 'Z') ||
-          (peek() >= 'a' && peek() <= 'z') ||
-          (peek() >= '0' && peek() <= '9') ||
-          peek() === '_')
-      ) {
-        word += advance()
-      }
-      const upper = word.toUpperCase()
-      // eslint-disable-next-line security/detect-object-injection -- key is an uppercased identifier from source text, looked up in a closed keyword table
-      const kwType = KEYWORDS[upper]
-      tokens.push(makeToken(kwType ?? 'IDENTIFIER', word, tokenLine, tokenCol))
+      scanIdentifier(tokenLine, tokenCol)
       continue
     }
 

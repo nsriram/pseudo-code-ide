@@ -77,6 +77,21 @@ describe('evaluate', () => {
     })
   })
 
+  describe('false positive prevention', () => {
+    it('does not pass when output 100 and expected is 10', () => {
+      const results = runEval('OUTPUT 100', [{ inputs: [], expected: '10' }])
+      expect(results[0].passed).toBe(false)
+    })
+    it('does not pass when output 21 and expected is 1', () => {
+      const results = runEval('OUTPUT 21', [{ inputs: [], expected: '1' }])
+      expect(results[0].passed).toBe(false)
+    })
+    it('still passes when phrase contains expected word', () => {
+      const results = runEval('OUTPUT "Grade: Pass"', [{ inputs: [], expected: 'Pass' }])
+      expect(results[0].passed).toBe(true)
+    })
+  })
+
   describe('multiple test cases', () => {
     it('evaluates all test cases independently', () => {
       const src = 'DECLARE a : INTEGER\nDECLARE b : INTEGER\nINPUT a\nINPUT b\nOUTPUT a + b'

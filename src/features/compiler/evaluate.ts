@@ -43,8 +43,9 @@ function outputMatches(actual: string, expected: string): boolean {
   // 1. Exact (normalised)
   if (normActual === normExpected) return true
 
-  // 2. Case-insensitive substring
-  if (normActual.toLowerCase().includes(normExpected.toLowerCase())) return true
+  // 2. Case-insensitive substring (only for non-numeric expected values)
+  const isPureNumber = normExpected !== '' && !isNaN(Number(normExpected))
+  if (!isPureNumber && normActual.toLowerCase().includes(normExpected.toLowerCase())) return true
 
   // 3. Numeric
   const expNum = Number(normExpected)
