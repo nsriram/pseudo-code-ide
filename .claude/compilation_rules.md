@@ -35,7 +35,6 @@ To perform a selection using IF statements for a single choice or a choice and a
 ### IF - single choice
 
 ```
-IF – single choice
 IF MyValue > YourValue
   THEN
     OUTPUT "I win"
