@@ -97,8 +97,8 @@ function evalExpr(expr: Expression, env: Environment, rt: Runtime): PseudoValue 
       switch (expr.operator) {
         case '-': return -(operand as number)
         case 'NOT': return !operand
-        default: throw new RuntimeError(`Unknown unary operator '${expr.operator}'`)
       }
+      break
     }
 
     case 'FunctionCall': {
