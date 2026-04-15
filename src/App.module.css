@@ -50,8 +50,11 @@
 .errorPane {
   width: 320px;
   flex-shrink: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   border-left: 1px solid #313244;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Tablet landscape (≤ 1024px) ───────────────────────────────────────────── */
