@@ -89,7 +89,11 @@ Key features include
 5. Implemented code should follow best practices defined in the `<PROJECT_ROOT>.claude/reactjs_best_practices.md` file. 
 6. Unit tests for all code should be generated.
 7. Once the implementation is complete, update or add the 'end to end UI test'
-8. Ensure git commits are done with clear messages and follow the git best practices
+8. Before committing, run the CI checks locally:
+   - `npm run lint` — must pass with zero errors
+   - `npm test` — all unit tests must pass
+9. Ensure git commits are done with clear messages and follow the git best practices
+10. The pre-push git hook (installed via `sh scripts/setup-hooks.sh`) enforces step 8 automatically on every push.
 
 ## Memory
 - The application will maintain a memory of the claude code interactions in `<PROJECT_ROOT>/.claude/MEMORY.md`.

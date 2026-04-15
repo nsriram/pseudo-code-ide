@@ -19,8 +19,20 @@ Thank you for your interest in contributing to the Pseudocode IDE. This guide co
 git clone https://github.com/nsriram/pseudo-code-ide.git
 cd pseudo-code-ide
 npm install
+sh scripts/setup-hooks.sh   # installs the pre-push git hook (lint + tests)
 npm run dev
 ```
+
+### Git hooks
+
+The project ships a pre-push hook that runs `npm run lint` and `npm test` before every push, mirroring the CI pipeline's first two gates.  
+Install it once after cloning:
+
+```bash
+sh scripts/setup-hooks.sh
+```
+
+If a push is blocked, fix the reported errors before retrying. Do not use `--no-verify` to skip the hook.
 
 ---
 

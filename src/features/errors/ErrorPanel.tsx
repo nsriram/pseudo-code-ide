@@ -14,6 +14,30 @@ const SOURCE_LABEL: Record<CompileError['source'], string> = {
   validator: 'Semantic',
 }
 
+function PanelBody({ errors, hasCompiled }: Props) {
+  if (!hasCompiled) {
+    return <p className={styles.idle}>Write your pseudocode and click Compile.</p>
+  }
+  if (errors.length === 0) {
+    return <p className={styles.success}>No errors found.</p>
+  }
+  return (
+    <ul className={styles.errorList}>
+      {errors.map((err, i) => (
+        <li key={i} className={styles.errorItem}>
+          <div className={styles.errorMeta}>
+            <span className={styles.location}>
+              Line {err.line}, Col {err.column}
+            </span>
+            <span className={styles.sourceTag}>{SOURCE_LABEL[err.source]}</span>
+          </div>
+          <span className={styles.message}>{err.message}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 export function ErrorPanel({ errors, hasCompiled }: Props) {
   return (
     <div className={styles.panel}>
@@ -26,25 +50,7 @@ export function ErrorPanel({ errors, hasCompiled }: Props) {
         )}
       </div>
       <div className={styles.body}>
-        {!hasCompiled ? (
-          <p className={styles.idle}>Write your pseudocode and click Compile.</p>
-        ) : errors.length === 0 ? (
-          <p className={styles.success}>No errors found.</p>
-        ) : (
-          <ul className={styles.errorList}>
-            {errors.map((err, i) => (
-              <li key={i} className={styles.errorItem}>
-                <div className={styles.errorMeta}>
-                  <span className={styles.location}>
-                    Line {err.line}, Col {err.column}
-                  </span>
-                  <span className={styles.sourceTag}>{SOURCE_LABEL[err.source]}</span>
-                </div>
-                <span className={styles.message}>{err.message}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        <PanelBody errors={errors} hasCompiled={hasCompiled} />
       </div>
     </div>
   )
