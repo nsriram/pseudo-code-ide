@@ -426,3 +426,15 @@ describe('bare RETURN in procedure', () => {
     expect(run(src).output).toBe('0')
   })
 })
+
+describe('callable used as value', () => {
+  it('throws when a procedure name is used as a value in OUTPUT', () => {
+    const src = [
+      'PROCEDURE Foo',
+      '  OUTPUT 1',
+      'ENDPROCEDURE',
+      'OUTPUT Foo',
+    ].join('\n')
+    expect(run(src).error).toMatch(/procedure\/function/)
+  })
+})

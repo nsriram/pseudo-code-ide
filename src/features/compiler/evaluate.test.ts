@@ -114,3 +114,12 @@ describe('evaluate', () => {
     })
   })
 })
+
+describe('withinTolerance — zero expected', () => {
+  it('passes when output is numerically zero but written as 0.0 in expected', () => {
+    // actual '0' vs expected '0.0': strings differ, so exact match fails; then numeric
+    // tolerance is checked with withinTolerance(0, 0) exercising the b===0 branch
+    const results = runEval('OUTPUT 0', [{ inputs: [], expected: '0.0' }])
+    expect(results[0].passed).toBe(true)
+  })
+})
