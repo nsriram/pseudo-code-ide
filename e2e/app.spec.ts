@@ -61,8 +61,9 @@ test.describe('Pseudocode IDE', () => {
       await expect(page.getByText('Output', { exact: true })).toBeVisible()
     })
 
-    test('shows no-error message before compiling', async ({ page }) => {
-      await expect(page.getByText(/no errors found/i)).toBeVisible()
+    test('shows idle prompt before compiling', async ({ page }) => {
+      await expect(page.getByText(/write your pseudocode/i)).toBeVisible()
+      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
     })
   })
 
@@ -140,25 +141,23 @@ test.describe('Pseudocode IDE', () => {
       await expect(page.getByRole('textbox')).toHaveValue('')
     })
 
-    test('clicking New Question resets output panel after a compile with errors', async ({ page }) => {
+    test('clicking New Question resets output panel to idle after a compile with errors', async ({ page }) => {
       await page.getByRole('textbox').fill('OUTPUT undeclaredVar')
       await page.getByRole('button', { name: /compile/i }).click()
       await expect(page.getByText(/no errors found/i)).not.toBeVisible()
       await page.getByRole('button', { name: /new question/i }).click()
-      await expect(page.getByText(/no errors found/i)).toBeVisible()
+      await expect(page.getByText(/write your pseudocode/i)).toBeVisible()
+      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
     })
 
-    test('clicking New Question resets output panel after a clean compile', async ({ page }) => {
+    test('clicking New Question resets output panel to idle after a clean compile', async ({ page }) => {
       const code = 'DECLARE x : INTEGER\nINPUT x\nOUTPUT x'
       await page.getByRole('textbox').fill(code)
       await page.getByRole('button', { name: /compile/i }).click()
       await expect(page.getByText(/no errors found/i)).toBeVisible()
-      // compile again with error to change state, then new question should reset
-      await page.getByRole('textbox').fill('OUTPUT undeclaredVar')
-      await page.getByRole('button', { name: /compile/i }).click()
-      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
       await page.getByRole('button', { name: /new question/i }).click()
-      await expect(page.getByText(/no errors found/i)).toBeVisible()
+      await expect(page.getByText(/write your pseudocode/i)).toBeVisible()
+      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
     })
   })
 

@@ -10,7 +10,7 @@ import styles from './App.module.css'
 export default function App() {
   const { question, nextQuestion } = useQuestion()
   const [code, setCode] = useState('')
-  const [errors, setErrors] = useState<CompileError[]>([])
+  const [errors, setErrors] = useState<CompileError[] | null>(null)
 
   function handleCompile() {
     const result = compile(code)
@@ -20,10 +20,10 @@ export default function App() {
   function handleNewQuestion() {
     nextQuestion()
     setCode('')
-    setErrors([])
+    setErrors(null)
   }
 
-  const errorLines = new Set(errors.map((e) => e.line))
+  const errorLines = new Set((errors ?? []).map((e) => e.line))
 
   return (
     <div className={styles.layout}>
@@ -43,7 +43,7 @@ export default function App() {
           />
         </div>
         <div className={styles.errorPane}>
-          <ErrorPanel errors={errors} />
+          <ErrorPanel errors={errors ?? []} hasCompiled={errors !== null} />
         </div>
       </main>
     </div>

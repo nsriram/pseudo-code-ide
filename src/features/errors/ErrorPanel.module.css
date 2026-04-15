@@ -33,6 +33,12 @@
   padding: 0.75rem;
 }
 
+.idle {
+  color: #585b70;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
 .success {
   color: #a6e3a1;
   font-size: 0.875rem;

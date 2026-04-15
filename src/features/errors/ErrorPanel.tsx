@@ -5,6 +5,7 @@ export type { CompileError }
 
 interface Props {
   errors: CompileError[]
+  hasCompiled: boolean
 }
 
 const SOURCE_LABEL: Record<CompileError['source'], string> = {
@@ -13,7 +14,7 @@ const SOURCE_LABEL: Record<CompileError['source'], string> = {
   validator: 'Semantic',
 }
 
-export function ErrorPanel({ errors }: Props) {
+export function ErrorPanel({ errors, hasCompiled }: Props) {
   return (
     <div className={styles.panel}>
       <div className={styles.header}>
@@ -25,7 +26,9 @@ export function ErrorPanel({ errors }: Props) {
         )}
       </div>
       <div className={styles.body}>
-        {errors.length === 0 ? (
+        {!hasCompiled ? (
+          <p className={styles.idle}>Write your pseudocode and click Compile.</p>
+        ) : errors.length === 0 ? (
           <p className={styles.success}>No errors found.</p>
         ) : (
           <ul className={styles.errorList}>
