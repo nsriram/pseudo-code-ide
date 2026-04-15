@@ -54,6 +54,20 @@ export function validate(program: Program): ValidationError[] {
     errors.push({ line, column, message })
   }
 
+  function checkDataType(dataType: DataType, scope: Scope, line: number, column: number) {
+    if (dataType.kind === 'NamedType') {
+      // NamedType is produced by the parser for any identifier that isn't a
+      // known keyword — check it is an in-scope TYPE declaration.
+      const sym = scope.lookup(dataType.name)
+      if (!sym || sym.kind !== 'type') {
+        error(line, column, `Unknown type '${dataType.name}'. Valid types: BOOLEAN, CHAR, INTEGER, REAL, STRING, DATE, or a declared TYPE name`)
+      }
+    } else if (dataType.kind === 'ArrayType') {
+      checkDataType(dataType.elementType, scope, line, column)
+    }
+    // PrimitiveType is always valid; mis-cased primitives are normalised by the lexer
+  }
+
   function checkExpr(expr: Expression, scope: Scope, insideFunction: boolean) {
     switch (expr.kind) {
       case 'Identifier': {
@@ -195,6 +209,7 @@ export function validate(program: Program): ValidationError[] {
 
       case 'DeclareStatement': {
         const s = stmt as DeclareStatement
+        checkDataType(s.dataType, scope, s.line, s.column)
         if (!scope.define({ kind: 'variable', name: s.name, dataType: s.dataType })) {
           error(s.line, s.column, `Variable '${s.name}' is already declared in this scope`)
         }
@@ -224,7 +239,10 @@ export function validate(program: Program): ValidationError[] {
           error(s.line, s.column, `Procedure '${s.name}' is already declared`)
         }
         const procScope = new Scope(scope)
-        s.params.forEach((p) => procScope.define({ kind: 'variable', name: p.name, dataType: p.dataType }))
+        s.params.forEach((p) => {
+          checkDataType(p.dataType, scope, s.line, s.column)
+          procScope.define({ kind: 'variable', name: p.name, dataType: p.dataType })
+        })
         checkStatements(s.body, procScope, false)
         break
       }
@@ -235,7 +253,10 @@ export function validate(program: Program): ValidationError[] {
           error(s.line, s.column, `Function '${s.name}' is already declared`)
         }
         const fnScope = new Scope(scope)
-        s.params.forEach((p) => fnScope.define({ kind: 'variable', name: p.name, dataType: p.dataType }))
+        s.params.forEach((p) => {
+          checkDataType(p.dataType, scope, s.line, s.column)
+          fnScope.define({ kind: 'variable', name: p.name, dataType: p.dataType })
+        })
         checkStatements(s.body, fnScope, true)
         break
       }

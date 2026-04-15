@@ -42,6 +42,18 @@ describe('compile() — full pipeline', () => {
     expect(errors.every((e) => e.source !== 'validator')).toBe(true)
   })
 
+  it('returns an error when code is empty', () => {
+    const { errors } = compile('')
+    expect(errors).toHaveLength(1)
+    expect(errors[0].message).toMatch(/no code entered/i)
+  })
+
+  it('returns an error when code is whitespace only', () => {
+    const { errors } = compile('   \n  \t  ')
+    expect(errors).toHaveLength(1)
+    expect(errors[0].message).toMatch(/no code entered/i)
+  })
+
   it('all errors have required fields', () => {
     const { errors } = compile('@bad\n#also bad')
     expect(errors.length).toBeGreaterThan(0)

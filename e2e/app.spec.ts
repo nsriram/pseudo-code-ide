@@ -134,6 +134,32 @@ test.describe('Pseudocode IDE', () => {
     })
   })
 
+  test.describe('Compile — empty code', () => {
+    test('compiling with no code shows an error message', async ({ page }) => {
+      await page.getByRole('button', { name: /compile/i }).click()
+      await expect(page.getByText(/no code entered/i)).toBeVisible()
+    })
+
+    test('compiling with no code does not show success message', async ({ page }) => {
+      await page.getByRole('button', { name: /compile/i }).click()
+      await expect(page.getByText(/no errors found/i)).not.toBeVisible()
+    })
+  })
+
+  test.describe('Compile — invalid type names', () => {
+    test('shows error for partial type name after colon', async ({ page }) => {
+      await page.getByRole('textbox').fill('DECLARE n1 : I')
+      await page.getByRole('button', { name: /compile/i }).click()
+      await expect(page.getByText(/unknown type/i)).toBeVisible()
+    })
+
+    test('accepts mis-cased primitive type names without error', async ({ page }) => {
+      await page.getByRole('textbox').fill('DECLARE n1 : integer')
+      await page.getByRole('button', { name: /compile/i }).click()
+      await expect(page.getByText(/no errors found/i)).toBeVisible()
+    })
+  })
+
   test.describe('New Question — state reset', () => {
     test('clicking New Question clears the editor', async ({ page }) => {
       await page.getByRole('textbox').fill('OUTPUT x')

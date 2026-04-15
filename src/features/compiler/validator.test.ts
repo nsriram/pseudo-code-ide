@@ -128,6 +128,57 @@ describe('validator', () => {
     })
   })
 
+  describe('data type validation', () => {
+    it('accepts all valid primitive types', () => {
+      const src = [
+        'DECLARE a : INTEGER',
+        'DECLARE b : REAL',
+        'DECLARE c : STRING',
+        'DECLARE d : BOOLEAN',
+        'DECLARE e : CHAR',
+        'DECLARE f : DATE',
+      ].join('\n')
+      expect(check(src)).toHaveLength(0)
+    })
+
+    it('reports error for completely unknown type name', () => {
+      const msgs = errorMessages('DECLARE n1 : I')
+      expect(msgs.some((m) => /unknown type/i.test(m))).toBe(true)
+    })
+
+    it('reports error for partial type name', () => {
+      const msgs = errorMessages('DECLARE n1 : In')
+      expect(msgs.some((m) => /unknown type/i.test(m))).toBe(true)
+    })
+
+    it('accepts mis-cased primitive type names (lexer normalises them)', () => {
+      // The lexer converts 'integer' → token type INTEGER before parsing,
+      // so it is treated as a valid PrimitiveType, not an unknown NamedType.
+      expect(check('DECLARE n1 : integer')).toHaveLength(0)
+    })
+
+    it('accepts a user-defined TYPE as a valid type name', () => {
+      const src = [
+        'TYPE',
+        'TBook',
+        '  DECLARE title : STRING',
+        'ENDTYPE',
+        'DECLARE book : TBook',
+      ].join('\n')
+      expect(check(src)).toHaveLength(0)
+    })
+
+    it('reports error when referencing an undeclared named type', () => {
+      const msgs = errorMessages('DECLARE book : TBook')
+      expect(msgs.some((m) => /unknown type 'TBook'/i.test(m))).toBe(true)
+    })
+
+    it('reports error for invalid type in ARRAY element', () => {
+      const msgs = errorMessages('DECLARE scores : ARRAY[1:5] OF Numbr')
+      expect(msgs.some((m) => /unknown type 'Numbr'/i.test(m))).toBe(true)
+    })
+  })
+
   describe('CASE OF statement', () => {
     it('validates CASE OF without errors', () => {
       const src = [

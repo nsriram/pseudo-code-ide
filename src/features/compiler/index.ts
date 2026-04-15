@@ -17,6 +17,20 @@ export interface CompileResult {
 }
 
 export function compile(source: string): CompileResult {
+  if (source.trim() === '') {
+    return {
+      errors: [
+        {
+          line: 1,
+          column: 1,
+          message: 'No code entered. Write your pseudocode and click Compile.',
+          severity: 'error',
+          source: 'validator',
+        },
+      ],
+    }
+  }
+
   const errors: CompileError[] = []
 
   const { tokens, errors: lexErrors } = tokenize(source)
