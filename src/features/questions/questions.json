@@ -237,209 +237,344 @@
     "difficulty": "intermediate",
     "title": "Count Odd and Even",
     "context": "A procedure Count() is required that:\n1. Inputs a value (all values will be positive integers)\n2. Counts the number of odd values and the number of even values input\n3. Repeats steps 1–2 until the sentinel value 99 is entered\n4. Outputs both counts with suitable messages\n\nThe sentinel value 99 must not be included in either count.",
-    "ask": "Write pseudocode for the procedure Count()."
+    "ask": "Write pseudocode for the procedure Count().",
+    "testCases": [
+      { "inputs": ["7", "9", "2", "99"], "expected": "2", "label": "2 odd numbers (7, 9)" },
+      { "inputs": ["7", "9", "2", "99"], "expected": "1", "label": "1 even number (2)" },
+      { "inputs": ["2", "4", "6", "99"], "expected": "0", "label": "0 odd numbers" }
+    ]
   },
   {
     "id": "q022",
     "difficulty": "intermediate",
     "title": "Running Total with Sentinel",
     "context": "A warehouse uses a program to total incoming stock quantities.\nThe operator enters quantities one at a time.\nEntering -1 signals the end of input.\nThe program must output the total quantity and the number of entries made.",
-    "ask": "Write pseudocode to repeatedly input a quantity until -1 is entered. Output the total of all valid quantities and the count of valid entries. The value -1 must not be included in either total."
+    "ask": "Write pseudocode to repeatedly input a quantity until -1 is entered. Output the total of all valid quantities and the count of valid entries. The value -1 must not be included in either total.",
+    "testCases": [
+      { "inputs": ["10", "20", "30", "-1"], "expected": "60", "label": "total = 60" },
+      { "inputs": ["10", "20", "30", "-1"], "expected": "3", "label": "3 valid entries" },
+      { "inputs": ["5", "-1"], "expected": "5", "label": "single entry total = 5" }
+    ]
   },
   {
     "id": "q023",
     "difficulty": "intermediate",
     "title": "Grade Calculator",
     "context": "A school uses the following grade boundaries for its examinations:\n  Grade A : 70 and above\n  Grade B : 60 – 69\n  Grade C : 50 – 59\n  Grade D : 40 – 49\n  Grade U : below 40\n\nAll marks are integers in the range 0 to 100.",
-    "ask": "Write pseudocode to input a student's mark and output the corresponding grade using a CASE statement. Include validation to reject marks outside the range 0–100."
+    "ask": "Write pseudocode to input a student's mark and output the corresponding grade using a CASE statement. Include validation to reject marks outside the range 0–100.",
+    "testCases": [
+      { "inputs": ["85"], "expected": "A", "label": "85 → Grade A" },
+      { "inputs": ["65"], "expected": "B", "label": "65 → Grade B" },
+      { "inputs": ["25"], "expected": "U", "label": "25 → Grade U" }
+    ]
   },
   {
     "id": "q024",
     "difficulty": "intermediate",
     "title": "String Reversal",
     "context": "A cryptography program needs to reverse the characters in a string as part of a simple cipher.\n\nThe pseudocode built-in functions available are:\n  LENGTH(s)        returns the number of characters in string s\n  MID(s, i, n)     returns n characters from string s starting at position i",
-    "ask": "Write pseudocode for a function Reverse(Word : STRING) RETURNS STRING that returns the characters of Word in reverse order. Use the LENGTH and MID functions."
+    "ask": "Write pseudocode for a function Reverse(Word : STRING) RETURNS STRING that returns the characters of Word in reverse order. Use the LENGTH and MID functions.",
+    "testCases": [
+      { "inputs": ["hello"], "expected": "olleh", "label": "Reverse('hello') = 'olleh'" },
+      { "inputs": ["abc"], "expected": "cba", "label": "Reverse('abc') = 'cba'" },
+      { "inputs": ["a"], "expected": "a", "label": "single char unchanged" }
+    ]
   },
   {
     "id": "q025",
     "difficulty": "intermediate",
     "title": "Array Maximum and Position",
     "context": "A data logging program stores 10 temperature readings taken at hourly intervals.\nThe readings are stored in a 1D integer array.\nThe program must find both the highest temperature and the hour at which it was recorded.\nArray positions 1 to 10 correspond to hours 1 to 10.",
-    "ask": "Write pseudocode to:\n1. Declare a 1D array of 10 integers called Temperatures\n2. Input 10 values into the array\n3. Output the highest temperature and the hour (index) at which it occurs"
+    "ask": "Write pseudocode to:\n1. Declare a 1D array of 10 integers called Temperatures\n2. Input 10 values into the array\n3. Output the highest temperature and the hour (index) at which it occurs",
+    "testCases": [
+      { "inputs": ["5", "8", "3", "9", "1", "2", "7", "4", "6", "0"], "expected": "9", "label": "max value = 9" },
+      { "inputs": ["5", "8", "3", "9", "1", "2", "7", "4", "6", "0"], "expected": "4", "label": "max at hour/position 4" }
+    ]
   },
   {
     "id": "q026",
     "difficulty": "intermediate",
     "title": "Fibonacci Sequence",
     "context": "The Fibonacci sequence is defined as follows:\n  Term 1 = 1\n  Term 2 = 1\n  Term n = Term(n−1) + Term(n−2)  for n > 2\n\nThe first eight terms are: 1, 1, 2, 3, 5, 8, 13, 21",
-    "ask": "Write pseudocode to input a positive integer N and output the first N terms of the Fibonacci sequence, one term per line."
+    "ask": "Write pseudocode to input a positive integer N and output the first N terms of the Fibonacci sequence, one term per line.",
+    "testCases": [
+      { "inputs": ["6"], "expected": "8", "label": "6th Fibonacci term = 8" },
+      { "inputs": ["1"], "expected": "1", "label": "1st Fibonacci term = 1" },
+      { "inputs": ["8"], "expected": "21", "label": "8th Fibonacci term = 21" }
+    ]
   },
   {
     "id": "q027",
     "difficulty": "intermediate",
     "title": "Number Guessing Game",
     "context": "A simple guessing game program works as follows:\n- The secret number is 42\n- The player repeatedly enters a guess\n- After each guess the program outputs \"Too high\", \"Too low\", or \"Correct!\"\n- The game ends when the player guesses correctly\n- The total number of attempts is recorded",
-    "ask": "Write pseudocode for the guessing game. Output the number of attempts taken once the player guesses correctly."
+    "ask": "Write pseudocode for the guessing game. Output the number of attempts taken once the player guesses correctly.",
+    "testCases": [
+      { "inputs": ["42"], "expected": "Correct", "label": "first guess correct → 'Correct!'" },
+      { "inputs": ["42"], "expected": "1", "label": "1 attempt when guessing correctly first time" },
+      { "inputs": ["20", "50", "42"], "expected": "3", "label": "3 attempts total" }
+    ]
   },
   {
     "id": "q028",
     "difficulty": "intermediate",
     "title": "Count Vowels in a String",
     "context": "A text analysis program needs to count the vowels in a word entered by the user.\nThe vowels are: a, e, i, o, u (both upper and lower case).\n\nBuilt-in functions:\n  LENGTH(s)      returns the number of characters in string s\n  MID(s, i, n)   returns n characters from string s starting at position i\n  LCASE(s)       returns string s converted to lower case",
-    "ask": "Write pseudocode to input a word and output the number of vowels it contains. Your solution must handle both upper and lower case letters."
+    "ask": "Write pseudocode to input a word and output the number of vowels it contains. Your solution must handle both upper and lower case letters.",
+    "testCases": [
+      { "inputs": ["hello"], "expected": "2", "label": "'hello' has 2 vowels" },
+      { "inputs": ["aeiou"], "expected": "5", "label": "'aeiou' has 5 vowels" },
+      { "inputs": ["xyz"], "expected": "0", "label": "'xyz' has 0 vowels" }
+    ]
   },
   {
     "id": "q029",
     "difficulty": "intermediate",
     "title": "Prime Number Check",
     "context": "A mathematics program needs to determine whether a number entered by the user is prime.\nA prime number is a whole number greater than 1 that has no factors other than 1 and itself.\nExamples of prime numbers: 2, 3, 5, 7, 11, 13.",
-    "ask": "Write pseudocode for a function IsPrime(N : INTEGER) RETURNS BOOLEAN that returns TRUE if N is prime and FALSE otherwise. Then write a main program that inputs a number and outputs whether it is prime."
+    "ask": "Write pseudocode for a function IsPrime(N : INTEGER) RETURNS BOOLEAN that returns TRUE if N is prime and FALSE otherwise. Then write a main program that inputs a number and outputs whether it is prime.",
+    "testCases": [
+      { "inputs": ["7"], "expected": "TRUE", "label": "7 is prime" },
+      { "inputs": ["6"], "expected": "FALSE", "label": "6 is not prime" },
+      { "inputs": ["2"], "expected": "TRUE", "label": "2 is prime" }
+    ]
   },
   {
     "id": "q030",
     "difficulty": "intermediate",
     "title": "Linear Search",
     "context": "A library system stores the ISBN numbers of borrowed books in a 1D array.\nThe array is declared as:\n  DECLARE Books : ARRAY[1:100] OF STRING\nThe variable BookCount stores the number of books currently in the array.\n\nThe system needs a function to search for a specific ISBN.",
-    "ask": "Write pseudocode for a function FindBook(ISBN : STRING) RETURNS INTEGER that performs a linear search of the Books array and returns the position (index) of the matching entry, or -1 if the ISBN is not found."
+    "ask": "Write pseudocode for a function FindBook(ISBN : STRING) RETURNS INTEGER that performs a linear search of the Books array and returns the position (index) of the matching entry, or -1 if the ISBN is not found.",
+    "testCases": [
+      { "inputs": ["3", "ISBN01", "ISBN02", "ISBN03", "ISBN02"], "expected": "2", "label": "ISBN02 found at position 2" },
+      { "inputs": ["3", "ISBN01", "ISBN02", "ISBN03", "ISBN99"], "expected": "-1", "label": "not found → -1" }
+    ]
   },
   {
     "id": "q031",
     "difficulty": "intermediate",
     "title": "Validate Password",
     "context": "A security system requires users to create a password that meets the following rules:\n- Must be at least 8 characters long\n- Must contain at least one digit (0–9)\n- Must contain at least one letter (a–z or A–Z)\n\nBuilt-in functions:\n  LENGTH(s)       returns the number of characters in s\n  MID(s, i, n)    returns n characters from s starting at position i",
-    "ask": "Write pseudocode for a function ValidPassword(Pwd : STRING) RETURNS BOOLEAN that returns TRUE if the password meets all three rules, and FALSE otherwise."
+    "ask": "Write pseudocode for a function ValidPassword(Pwd : STRING) RETURNS BOOLEAN that returns TRUE if the password meets all three rules, and FALSE otherwise.",
+    "testCases": [
+      { "inputs": ["Secure12"], "expected": "TRUE", "label": "8+ chars, letter and digit → TRUE" },
+      { "inputs": ["abc"], "expected": "FALSE", "label": "too short → FALSE" },
+      { "inputs": ["abcdefgh"], "expected": "FALSE", "label": "no digit → FALSE" }
+    ]
   },
   {
     "id": "q032",
     "difficulty": "intermediate",
     "title": "Sales Report",
     "context": "A shop records daily sales figures for five days of the week.\nSales are stored in a 1D array:\n  DECLARE Sales : ARRAY[1:5] OF REAL\n\nThe program must calculate:\n- The total sales for the week\n- The average daily sales\n- The day with the highest sales (use day numbers 1–5)",
-    "ask": "Write pseudocode to input 5 sales figures, store them in the array, then output the total, average, and the day number with the highest sales."
+    "ask": "Write pseudocode to input 5 sales figures, store them in the array, then output the total, average, and the day number with the highest sales.",
+    "testCases": [
+      { "inputs": ["100", "200", "150", "300", "250"], "expected": "1000", "label": "total = 1000" },
+      { "inputs": ["100", "200", "150", "300", "250"], "expected": "200", "label": "average = 200" },
+      { "inputs": ["100", "200", "150", "300", "250"], "expected": "4", "label": "highest sales on day 4 (300)" }
+    ]
   },
   {
     "id": "q033",
     "difficulty": "intermediate",
     "title": "Multiplication Table Generator",
     "context": "A primary school teacher wants a program that prints multiplication tables.\nFor a given number N, the program should output lines of the form:\n  N x 1 = N\n  N x 2 = 2N\n  ...\n  N x 12 = 12N",
-    "ask": "Write pseudocode to input a positive integer N and output the complete multiplication table for N from 1 to 12."
+    "ask": "Write pseudocode to input a positive integer N and output the complete multiplication table for N from 1 to 12.",
+    "testCases": [
+      { "inputs": ["5"], "expected": "60", "label": "5 × 12 = 60" },
+      { "inputs": ["5"], "expected": "5", "label": "5 × 1 = 5" },
+      { "inputs": ["3"], "expected": "36", "label": "3 × 12 = 36" }
+    ]
   },
   {
     "id": "q034",
     "difficulty": "intermediate",
     "title": "Decimal to Binary Conversion",
     "context": "A computer science revision tool converts positive integers to their binary representation.\nThe conversion algorithm repeatedly divides the number by 2 and records the remainders.\nThe binary representation is the remainders read in reverse order.\n\nFor example: 13 → remainders 1,0,1,1 → binary 1101",
-    "ask": "Write pseudocode to input a positive integer and output its binary representation as a string. Build the result by concatenating remainder digits and reversing at the end."
+    "ask": "Write pseudocode to input a positive integer and output its binary representation as a string. Build the result by concatenating remainder digits and reversing at the end.",
+    "testCases": [
+      { "inputs": ["13"], "expected": "1101", "label": "13 → 1101" },
+      { "inputs": ["8"], "expected": "1000", "label": "8 → 1000" },
+      { "inputs": ["1"], "expected": "1", "label": "1 → 1" }
+    ]
   },
   {
     "id": "q035",
     "difficulty": "intermediate",
     "title": "ATM Withdrawal",
     "context": "An ATM program processes cash withdrawal requests.\nRules:\n- The account balance is stored as a REAL variable\n- A withdrawal is allowed only if the requested amount is:\n  - A positive multiple of 10\n  - Less than or equal to the current balance\n  - Less than or equal to the daily limit of $500\n- A $2.00 transaction fee is deducted in addition to the withdrawal amount",
-    "ask": "Write pseudocode for a procedure Withdraw(Amount : REAL) that validates the request according to all three rules and, if valid, deducts the amount plus the fee from the balance. Output a success or failure message."
+    "ask": "Write pseudocode for a procedure Withdraw(Amount : REAL) that validates the request according to all three rules and, if valid, deducts the amount plus the fee from the balance. Output a success or failure message.",
+    "testCases": [
+      { "inputs": ["600"], "expected": "fail", "label": "amount 600 exceeds daily limit → fail" },
+      { "inputs": ["0"], "expected": "fail", "label": "zero is not a positive multiple of 10 → fail" }
+    ]
   },
   {
     "id": "q036",
     "difficulty": "intermediate",
     "title": "Word Count in a Sentence",
     "context": "A text editor needs to count the number of words in a sentence entered by the user.\nWords are separated by single spaces.\nThe sentence always starts and ends with a non-space character.\n\nBuilt-in functions:\n  LENGTH(s)       returns the number of characters in s\n  MID(s, i, n)    returns n characters from s starting at position i",
-    "ask": "Write pseudocode to input a sentence and output the number of words it contains. You may assume there are no consecutive spaces."
+    "ask": "Write pseudocode to input a sentence and output the number of words it contains. You may assume there are no consecutive spaces.",
+    "testCases": [
+      { "inputs": ["hello world"], "expected": "2", "label": "'hello world' has 2 words" },
+      { "inputs": ["one two three"], "expected": "3", "label": "3 words" },
+      { "inputs": ["single"], "expected": "1", "label": "single word = 1" }
+    ]
   },
   {
     "id": "q037",
     "difficulty": "intermediate",
     "title": "Highest Common Factor",
     "context": "A mathematics program computes the Highest Common Factor (HCF) of two positive integers using the Euclidean algorithm.\nThe algorithm is:\n  WHILE b ≠ 0\n    temp ← b\n    b ← a MOD b\n    a ← temp\n  HCF = a",
-    "ask": "Write pseudocode for a function HCF(A : INTEGER, B : INTEGER) RETURNS INTEGER that returns the highest common factor of A and B using the Euclidean algorithm shown above."
+    "ask": "Write pseudocode for a function HCF(A : INTEGER, B : INTEGER) RETURNS INTEGER that returns the highest common factor of A and B using the Euclidean algorithm shown above.",
+    "testCases": [
+      { "inputs": ["12", "8"], "expected": "4", "label": "HCF(12, 8) = 4" },
+      { "inputs": ["15", "10"], "expected": "5", "label": "HCF(15, 10) = 5" },
+      { "inputs": ["7", "3"], "expected": "1", "label": "HCF(7, 3) = 1" }
+    ]
   },
   {
     "id": "q038",
     "difficulty": "intermediate",
     "title": "Stack Using an Array",
     "context": "A program simulates a stack data structure using a 1D array.\nThe stack is declared as:\n  DECLARE Stack : ARRAY[1:10] OF INTEGER\n  DECLARE Top : INTEGER    // points to the index of the top item; 0 means empty\n\nTwo operations are needed:\n  Push(Value) — adds Value to the top of the stack if not full\n  Pop()       — removes and returns the top value if not empty",
-    "ask": "Write pseudocode for the procedures Push(Value : INTEGER) and Pop() RETURNS INTEGER. Each procedure must check for overflow and underflow respectively and output an error message if the operation cannot be performed."
+    "ask": "Write pseudocode for the procedures Push(Value : INTEGER) and Pop() RETURNS INTEGER. Each procedure must check for overflow and underflow respectively and output an error message if the operation cannot be performed.",
+    "testCases": [
+      { "inputs": ["42"], "expected": "42", "label": "push 42 then pop → outputs 42" },
+      { "inputs": ["5", "10", "15"], "expected": "15", "label": "push 5,10,15 then pop → outputs 15 (LIFO)" }
+    ]
   },
   {
     "id": "q039",
     "difficulty": "intermediate",
     "title": "Register Mark Entry",
     "context": "A teacher enters examination marks for a class into a program.\n- The number of students is input first\n- Then one mark per student is entered (marks are integers 0–100)\n- The program stores marks in a 1D array\n- After all marks are entered, the program outputs:\n  - The class average\n  - The number of students who scored above the average",
-    "ask": "Write pseudocode to implement the above system. Declare the array with a maximum size of 50."
+    "ask": "Write pseudocode to implement the above system. Declare the array with a maximum size of 50.",
+    "testCases": [
+      { "inputs": ["5", "60", "70", "80", "90", "100"], "expected": "80", "label": "average = 80" },
+      { "inputs": ["5", "60", "70", "80", "90", "100"], "expected": "2", "label": "2 students above average (90, 100)" }
+    ]
   },
   {
     "id": "q040",
     "difficulty": "intermediate",
     "title": "Caesar Cipher Encoder",
     "context": "A Caesar cipher shifts each letter in a message by a fixed number of positions in the alphabet.\nFor example, with shift 3: A→D, B→E, Z→C.\nOnly letters (A–Z, a–z) are shifted; all other characters remain unchanged.\nThe shift wraps around (Z shifted by 1 becomes A).\n\nBuilt-in functions:\n  LENGTH(s)       returns the number of characters in s\n  MID(s, i, n)    returns n characters from s at position i\n  ASC(c)          returns the ASCII code of character c\n  CHR(n)          returns the character with ASCII code n",
-    "ask": "Write pseudocode for a function CaesarEncode(Message : STRING, Shift : INTEGER) RETURNS STRING that encodes the message using the Caesar cipher with the given shift value."
+    "ask": "Write pseudocode for a function CaesarEncode(Message : STRING, Shift : INTEGER) RETURNS STRING that encodes the message using the Caesar cipher with the given shift value.",
+    "testCases": [
+      { "inputs": ["abc", "3"], "expected": "def", "label": "shift 3: abc → def" },
+      { "inputs": ["xyz", "3"], "expected": "abc", "label": "shift 3: xyz → abc (wrap-around)" },
+      { "inputs": ["Hello", "1"], "expected": "Ifmmp", "label": "shift 1: Hello → Ifmmp" }
+    ]
   },
   {
     "id": "q041",
     "difficulty": "complex",
     "title": "Delete Leading Spaces",
     "context": "A teacher is designing a program to process pseudocode projects written by students.\nEach student's project is stored in a text file and processed in stages.\n\nStage 1 requires a module called DeleteSpaces:\n- Called with a parameter of type STRING representing one line of pseudocode\n- Returns the line with all leading space characters removed\n\nExample:\n  Input:  \"   IF X > 13 THEN\"\n  Output: \"IF X > 13 THEN\"",
-    "ask": "Complete the pseudocode for the module below.\nFUNCTION DeleteSpaces(Line : STRING) RETURNS STRING"
+    "ask": "Complete the pseudocode for the module below.\nFUNCTION DeleteSpaces(Line : STRING) RETURNS STRING",
+    "testCases": [
+      { "inputs": ["   hello"], "expected": "hello", "label": "leading spaces removed" },
+      { "inputs": ["   IF X > 13 THEN"], "expected": "IF X > 13 THEN", "label": "example from question" },
+      { "inputs": ["nospaces"], "expected": "nospaces", "label": "no change when no leading spaces" }
+    ]
   },
   {
     "id": "q042",
     "difficulty": "complex",
     "title": "Stage 2 File Processing",
     "context": "A teacher's pseudocode project processor has two already-written modules:\n\nDeleteSpaces(Line : STRING) RETURNS STRING\n  — removes leading spaces from a line (written in a previous question)\n\nDeleteComment(Line : STRING) RETURNS STRING\n  — removes any comment from a line and returns the result\n\nA new module Stage_2 is now required:\n- Takes two STRING parameters: an input filename and an output filename\n- Reads each line from the input file\n- Removes leading spaces and comments using the two modules above\n- Writes non-blank lines to the output file\n- Outputs a message at the end stating how many blank lines were not written",
-    "ask": "Write pseudocode for the module Stage_2(InputFile : STRING, OutputFile : STRING).\nYou must use DeleteSpaces() and DeleteComment() in your solution."
+    "ask": "Write pseudocode for the module Stage_2(InputFile : STRING, OutputFile : STRING).\nYou must use DeleteSpaces() and DeleteComment() in your solution.",
+    "testCases": [
+      { "inputs": ["input.txt", "output.txt"], "expected": "0", "label": "basic call completes without error (file I/O simulated)" }
+    ]
   },
   {
     "id": "q043",
     "difficulty": "complex",
     "title": "Network Route Lookup",
     "context": "Computers in a network each have a unique three-digit ID.\nMessages are forwarded between computers using a global routing table:\n\n  DECLARE RouteTable : ARRAY[1:6, 1:3] OF INTEGER\n\n- Column 1: lower bound of an ID range\n- Column 2: upper bound of the ID range\n- Column 3: the port number to use when forwarding to that range\n- Unused rows have –1 in column 1\n\nExample RouteTable contents:\n  Row 1: 100, 199, 1\n  Row 2: 200, 259, 2\n  Row 3: –1,  —,   —\n  Row 4: 260, 399, 2\n  Row 5: 400, 599, 3\n  Row 6: 600, 999, 1\n\nA message with DestinationID \"283\" would use port 2 (row 4 matches 260–399).",
-    "ask": "Write pseudocode for the function:\n  GetPort(DestinationID : STRING) RETURNS INTEGER\n\nThe function should:\n- Search RouteTable for the range that contains DestinationID\n- Return the corresponding port number\n- Return –1 if no matching range is found\n\nAssume DestinationID is always a valid three-digit string."
+    "ask": "Write pseudocode for the function:\n  GetPort(DestinationID : STRING) RETURNS INTEGER\n\nThe function should:\n- Search RouteTable for the range that contains DestinationID\n- Return the corresponding port number\n- Return –1 if no matching range is found\n\nAssume DestinationID is always a valid three-digit string.",
+    "testCases": [
+      { "inputs": ["150"], "expected": "1", "label": "ID 150 → port 1 (range 100-199)" },
+      { "inputs": ["250"], "expected": "2", "label": "ID 250 → port 2 (range 200-259)" }
+    ]
   },
   {
     "id": "q044",
     "difficulty": "complex",
     "title": "Student Record System",
     "context": "A school needs a program to manage student examination records.\nEach student record holds:\n  - Name         STRING\n  - Three marks  INTEGER  (Maths, Science, English; each 0–100)\n  - Average      REAL     (calculated from the three marks)\n\nA TYPE declaration for TStudent should be used.\nThe class has at most 30 students.\nStudent data is stored in a text file \"students.txt\" with each student's data on four consecutive lines: name, then three marks.",
-    "ask": "Write pseudocode to:\n1. Declare the TStudent record type\n2. Declare an array of 30 TStudent records called Class\n3. Write a procedure LoadStudents() that reads data from \"students.txt\" and fills the array, setting StudentCount to the number loaded\n4. Write a function AverageForStudent(S : TStudent) RETURNS REAL that returns the mean of the three marks"
+    "ask": "Write pseudocode to:\n1. Declare the TStudent record type\n2. Declare an array of 30 TStudent records called Class\n3. Write a procedure LoadStudents() that reads data from \"students.txt\" and fills the array, setting StudentCount to the number loaded\n4. Write a function AverageForStudent(S : TStudent) RETURNS REAL that returns the mean of the three marks",
+    "testCases": [
+      { "inputs": ["60", "70", "80"], "expected": "70", "label": "average of 60, 70, 80 = 70" },
+      { "inputs": ["100", "100", "100"], "expected": "100", "label": "average of all 100 = 100" }
+    ]
   },
   {
     "id": "q045",
     "difficulty": "complex",
     "title": "Bubble Sort",
     "context": "A program needs to sort an array of examination marks into ascending order.\nThe array is declared as:\n  DECLARE Marks : ARRAY[1:N] OF INTEGER\n\nThe bubble sort algorithm works by making repeated passes through the array.\nOn each pass, adjacent elements that are in the wrong order are swapped.\nThe algorithm stops when a complete pass is made with no swaps.",
-    "ask": "Write pseudocode for a procedure BubbleSort(BYREF Data : ARRAY[1:N] OF INTEGER, Size : INTEGER) that sorts the array in ascending order using bubble sort.\nUse a REPEAT…UNTIL loop that terminates when no swaps occur in a pass."
+    "ask": "Write pseudocode for a procedure BubbleSort(BYREF Data : ARRAY[1:N] OF INTEGER, Size : INTEGER) that sorts the array in ascending order using bubble sort.\nUse a REPEAT…UNTIL loop that terminates when no swaps occur in a pass.",
+    "testCases": [
+      { "inputs": ["5", "5", "3", "1", "4", "2"], "expected": "1", "label": "smallest element = 1 after sort" },
+      { "inputs": ["5", "5", "3", "1", "4", "2"], "expected": "5", "label": "largest element = 5 after sort" },
+      { "inputs": ["3", "9", "3", "7"], "expected": "3", "label": "smallest of [9,3,7] = 3" }
+    ]
   },
   {
     "id": "q046",
     "difficulty": "complex",
     "title": "Binary Search",
     "context": "A program stores a sorted list of product codes in a 1D array:\n  DECLARE Products : ARRAY[1:200] OF STRING\n  DECLARE ProductCount : INTEGER\n\nThe array is sorted in ascending alphabetical order.\nA binary search is more efficient than a linear search for large sorted arrays.\n\nBinary search algorithm:\n- Set Low = 1, High = ProductCount\n- Repeatedly calculate Mid = (Low + High) DIV 2\n- Compare the target with Products[Mid]\n- Narrow the search range until found or Low > High",
-    "ask": "Write pseudocode for a function BinarySearch(Target : STRING) RETURNS INTEGER that searches the Products array and returns the index of Target, or –1 if not found."
+    "ask": "Write pseudocode for a function BinarySearch(Target : STRING) RETURNS INTEGER that searches the Products array and returns the index of Target, or –1 if not found.",
+    "testCases": [
+      { "inputs": ["3", "AAA", "BBB", "CCC", "BBB"], "expected": "2", "label": "BBB found at position 2" },
+      { "inputs": ["3", "AAA", "BBB", "CCC", "ZZZ"], "expected": "-1", "label": "ZZZ not found → -1" }
+    ]
   },
   {
     "id": "q047",
     "difficulty": "complex",
     "title": "2D Array: Seating Plan",
     "context": "A cinema uses a 2D array to represent its seating plan:\n  DECLARE Seats : ARRAY[1:10, 1:15] OF BOOLEAN\n  TRUE means the seat is booked; FALSE means it is available.\n  Rows are numbered 1–10, columns 1–15.\n\nThree operations are required:\n  BookSeat(Row, Col)   — marks a seat as booked if it is currently free\n  CancelSeat(Row, Col) — marks a seat as available if it is currently booked\n  CountAvailable()     — returns the total number of available seats",
-    "ask": "Write pseudocode for all three procedures/functions described above.\nEach procedure must validate that the row and column are within bounds and output an appropriate error message if not."
+    "ask": "Write pseudocode for all three procedures/functions described above.\nEach procedure must validate that the row and column are within bounds and output an appropriate error message if not.",
+    "testCases": [
+      { "inputs": [], "expected": "150", "label": "all 150 seats available initially" }
+    ]
   },
   {
     "id": "q048",
     "difficulty": "complex",
     "title": "Recursive Factorial",
     "context": "A mathematics library requires a recursive implementation of the factorial function.\nThe factorial of a non-negative integer n is defined as:\n  0! = 1\n  n! = n × (n − 1)!   for n > 0\n\nFor example: 5! = 5 × 4 × 3 × 2 × 1 = 120\n\nThe function must handle the base case to avoid infinite recursion.",
-    "ask": "Write pseudocode for a recursive function Factorial(N : INTEGER) RETURNS INTEGER.\nThen write a main program that inputs a non-negative integer and outputs its factorial."
+    "ask": "Write pseudocode for a recursive function Factorial(N : INTEGER) RETURNS INTEGER.\nThen write a main program that inputs a non-negative integer and outputs its factorial.",
+    "testCases": [
+      { "inputs": ["5"], "expected": "120", "label": "5! = 120" },
+      { "inputs": ["0"], "expected": "1", "label": "0! = 1" },
+      { "inputs": ["10"], "expected": "3628800", "label": "10! = 3628800" }
+    ]
   },
   {
     "id": "q049",
     "difficulty": "complex",
     "title": "Queue Using an Array",
     "context": "A program simulates a queue (first-in, first-out) data structure using a circular array:\n  DECLARE Queue : ARRAY[1:8] OF INTEGER\n  DECLARE Front : INTEGER   // index of the front item\n  DECLARE Rear  : INTEGER   // index of the last item\n  DECLARE Size  : INTEGER   // current number of items\n\nInitially Front = 1, Rear = 0, Size = 0.\nThe queue uses positions 1–8 with wrap-around (after position 8 comes position 1).\n\nTwo operations are needed:\n  Enqueue(Value) — adds Value to the rear if not full (max 8 items)\n  Dequeue()      — removes and returns the front value if not empty",
-    "ask": "Write pseudocode for both Enqueue(Value : INTEGER) and Dequeue() RETURNS INTEGER.\nEach must check for overflow/underflow and output an error message if the operation cannot be performed."
+    "ask": "Write pseudocode for both Enqueue(Value : INTEGER) and Dequeue() RETURNS INTEGER.\nEach must check for overflow/underflow and output an error message if the operation cannot be performed.",
+    "testCases": [
+      { "inputs": ["42"], "expected": "42", "label": "enqueue 42 then dequeue → 42 (FIFO)" },
+      { "inputs": ["5", "10", "15"], "expected": "5", "label": "enqueue 5,10,15 then dequeue → 5 (FIFO, not LIFO)" }
+    ]
   },
   {
     "id": "q050",
     "difficulty": "complex",
     "title": "Text File Word Frequency",
     "context": "A program analyses a text file to count how many times each unique word appears.\nThe file \"document.txt\" contains one word per line (all lowercase, no punctuation).\n\nTwo parallel arrays are used:\n  DECLARE Words  : ARRAY[1:100] OF STRING\n  DECLARE Counts : ARRAY[1:100] OF INTEGER\n  DECLARE UniqueCount : INTEGER   // number of distinct words found so far\n\nAlgorithm:\n- For each word read from the file:\n  - If the word already exists in Words[], increment the corresponding Counts[] entry\n  - Otherwise add it as a new entry with count 1\n- After processing, output each word and its count, sorted by count (highest first)",
-    "ask": "Write pseudocode to:\n1. Read all words from \"document.txt\" and populate the two arrays\n2. Write a procedure SortByFrequency() that sorts both arrays together by count in descending order (use any sort algorithm)\n3. Output each unique word and its count after sorting"
+    "ask": "Write pseudocode to:\n1. Read all words from \"document.txt\" and populate the two arrays\n2. Write a procedure SortByFrequency() that sorts both arrays together by count in descending order (use any sort algorithm)\n3. Output each unique word and its count after sorting",
+    "testCases": [
+      { "inputs": [], "expected": "0", "label": "no words processed without file (structure check only)" }
+    ]
   }
 ]
