@@ -71,7 +71,7 @@ describe('App', () => {
     expect(screen.queryByText(/no syntax errors found/i)).not.toBeInTheDocument()
   })
 
-  describe('Run Tests', () => {
+  describe('auto-evaluation on clean compile', () => {
     const validSolution = [
       'DECLARE a : INTEGER',
       'DECLARE b : INTEGER',
@@ -80,31 +80,30 @@ describe('App', () => {
       'OUTPUT a + b',
     ].join('\n')
 
-    it('Run Tests button is not visible before compiling', () => {
+    it('evaluation panel does not appear before compiling', () => {
       render(<App />)
-      expect(screen.queryByRole('button', { name: /run tests/i })).not.toBeInTheDocument()
+      expect(screen.queryByText('Tests')).not.toBeInTheDocument()
     })
 
-    it('Run Tests button appears after successful compile on a question with test cases', async () => {
+    it('shows evaluation panel immediately after a clean compile on a question with test cases', async () => {
       render(<App />)
       await userEvent.type(screen.getByRole('textbox'), validSolution)
       await userEvent.click(screen.getByRole('button', { name: /compile/i }))
-      expect(screen.getByRole('button', { name: /run tests/i })).toBeVisible()
-    })
-
-    it('clicking Run Tests shows evaluation panel', async () => {
-      render(<App />)
-      await userEvent.type(screen.getByRole('textbox'), validSolution)
-      await userEvent.click(screen.getByRole('button', { name: /compile/i }))
-      await userEvent.click(screen.getByRole('button', { name: /run tests/i }))
       expect(screen.getByText('Tests')).toBeVisible()
+    })
+
+    it('shows failing tests when code compiles but does not solve the problem', async () => {
+      render(<App />)
+      await userEvent.type(screen.getByRole('textbox'), 'DECLARE x : INTEGER')
+      await userEvent.click(screen.getByRole('button', { name: /compile/i }))
+      expect(screen.getByText('Tests')).toBeVisible()
+      expect(screen.getByText(/0\//)).toBeVisible()
     })
 
     it('clicking New Question removes test results', async () => {
       render(<App />)
       await userEvent.type(screen.getByRole('textbox'), validSolution)
       await userEvent.click(screen.getByRole('button', { name: /compile/i }))
-      await userEvent.click(screen.getByRole('button', { name: /run tests/i }))
       expect(screen.getByText('Tests')).toBeVisible()
       await userEvent.click(screen.getByRole('button', { name: /new question/i }))
       expect(screen.queryByText('Tests')).not.toBeInTheDocument()

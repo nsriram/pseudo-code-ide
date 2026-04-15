@@ -27,9 +27,9 @@ describe('ErrorPanel', () => {
       expect(screen.getByText(/manually verify/i)).toBeInTheDocument()
     })
 
-    it('shows "click run tests" hint when hasTestCases is true', () => {
+    it('does not show manually verify hint when hasTestCases is true (tests run automatically)', () => {
       render(<ErrorPanel errors={[]} hasCompiled={true} hasTestCases={true} />)
-      expect(screen.getByText(/click run tests/i)).toBeInTheDocument()
+      expect(screen.queryByText(/manually verify/i)).not.toBeInTheDocument()
     })
 
     it('does not show idle prompt after compilation', () => {

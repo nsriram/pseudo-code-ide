@@ -22,7 +22,12 @@ export default function App() {
     const result = compile(code)
     setErrors(result.errors)
     setProgram(result.program)
-    setEvalResults(null)
+    // Auto-evaluate immediately on a clean compile when the question has test cases
+    if (result.program && question.testCases?.length) {
+      setEvalResults(evaluate(result.program, question.testCases))
+    } else {
+      setEvalResults(null)
+    }
   }
 
   function handleRunTests() {

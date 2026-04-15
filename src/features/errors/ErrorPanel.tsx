@@ -20,13 +20,12 @@ function PanelBody({ errors, hasCompiled, hasTestCases }: Props) {
     return <p className={styles.idle}>Write your pseudocode and click Compile.</p>
   }
   if (errors.length === 0) {
-    const hint = hasTestCases
-      ? 'Click Run Tests to check your solution.'
-      : 'Manually verify your output matches the expected result.'
     return (
       <>
         <p className={styles.success}>No syntax errors found.</p>
-        <p className={styles.hint}>{hint}</p>
+        {!hasTestCases && (
+          <p className={styles.hint}>Manually verify your output matches the expected result.</p>
+        )}
       </>
     )
   }
