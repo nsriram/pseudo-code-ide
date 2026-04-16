@@ -15,9 +15,11 @@ A browser-based IDE for Cambridge AS Level Computer Science students to practise
 
 - **Exam-style question bank** — 50 questions across three difficulty levels (simple, intermediate, complex), modelled on real Cambridge AS exam papers with rich scenario context
 - **Pseudocode editor** — plain text editor with line numbers and error gutter highlighting; no autocomplete so students practise unaided
-- **Compiler pipeline** — full lexer → parser → semantic validator running entirely in the browser; no backend required
+- **Compiler pipeline** — full five-phase pipeline (lexer → parser → semantic validator → interpreter → evaluator) running entirely in the browser; no backend required
+- **Auto-evaluation** — on a clean compile the program is executed against the question's test cases and a pass/fail result is shown instantly
 - **Error panel** — structured error output with line/column references and source tags (Syntax, Structure, Semantic)
-- **Responsive layout** — works on desktop and tablet (iPad portrait and landscape)
+- **Keyboard shortcut** — Ctrl+Enter (or Cmd+Enter on Mac) compiles without lifting hands from the keyboard
+- **Responsive layout** — works on desktop, tablet, and mobile (stacks vertically on small screens)
 
 ---
 
@@ -110,9 +112,10 @@ npm test -- scripts/generate-questions.test.ts
 pseudo-code-ide/
 ├── src/
 │   ├── features/
-│   │   ├── compiler/        # Lexer, parser, AST, validator, compiler index
+│   │   ├── compiler/        # Lexer, parser, AST, validator, interpreter, runtime, evaluator
 │   │   ├── editor/          # PseudocodeEditor component
 │   │   ├── errors/          # ErrorPanel component
+│   │   ├── evaluation/      # EvaluationPanel component (test case results)
 │   │   └── questions/       # QuestionPanel, useQuestion hook, questions.json
 │   ├── App.tsx
 │   └── main.tsx
@@ -120,8 +123,12 @@ pseudo-code-ide/
 │   ├── generate-questions.ts   # Question bank generator
 │   └── generate-report.ts      # ESLint JSON → HTML quality dashboard
 ├── e2e/                         # Playwright end-to-end tests
+│   ├── app.spec.ts              # Feature-level smoke tests
+│   └── journeys.spec.ts         # Full user-journey scenarios
 ├── sample_questions/            # Reference Cambridge exam questions
 ├── .claude/                     # Claude Code config and pseudocode compilation rules
+├── COMPILER_DESIGN.md           # Compiler theory reference (lexer through evaluator)
+├── DESIGN.md                    # UI layout, component design, data model
 ├── Dockerfile
 ├── nginx.conf
 └── render.yaml
@@ -139,7 +146,7 @@ push / PR
   ├─ 1. Lint ──────────────────────────────── ESLint (security, a11y, sonarjs, react)
   │        │
   │        ├─ 2. Build ──────────────────────── tsc + vite build → uploads dist/ artifact
-  │        ├─ 3. Test ───────────────────────── Vitest unit tests (364 tests)
+  │        ├─ 3. Test ───────────────────────── Vitest unit tests (515 tests)
   │        └─ 5. Quality Report (main only) ──── ESLint HTML dashboard → GitHub Pages
   │
   ├─ 4. E2E (needs: Build + Test) ──────────── Playwright against Docker container
@@ -174,7 +181,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Design
 
-See [DESIGN.md](DESIGN.md) for UI layout, component design, and compiler architecture.
+See [DESIGN.md](DESIGN.md) for UI layout, component design, and compiler architecture overview.  
+See [COMPILER_DESIGN.md](COMPILER_DESIGN.md) for a full compiler-theory walkthrough of every phase (lexer, parser, validator, interpreter, evaluator).
 
 ## License
 

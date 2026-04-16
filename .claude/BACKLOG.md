@@ -1,7 +1,8 @@
 # Technical Backlog — Pseudo-Code IDE
 
-> Architect review conducted on 2026-04-15.  
-> Issues are grouped by theme and ordered **High → Medium → Low** within each group.
+> Architect review conducted on 2026-04-15. Last updated 2026-04-16.  
+> Issues are grouped by theme and ordered **High → Medium → Low** within each group.  
+> ✅ = resolved and shipped &nbsp;|&nbsp; 🔲 = open
 
 ---
 
@@ -20,8 +21,8 @@
 
 ## 1. Compiler — Correctness
 
-### BUG-001 · CASE clause only allows a single statement per branch
-**Priority:** High  
+### ✅ BUG-001 · CASE clause only allows a single statement per branch
+**Priority:** High &nbsp;|&nbsp; **Status:** Resolved — `isNextClauseStart()` predicate added to parser  
 **File:** `src/features/compiler/parser.ts:363`
 
 **Problem:**  
@@ -39,8 +40,8 @@ Replace the single `parseStatement()` call per clause with `parseBlock(stopToken
 
 ---
 
-### BUG-002 · Output matching produces false positives via substring rule
-**Priority:** High  
+### ✅ BUG-002 · Output matching produces false positives via substring rule
+**Priority:** High &nbsp;|&nbsp; **Status:** Resolved — `isPureNumber` guard added to `evaluate.ts`  
 **File:** `src/features/compiler/evaluate.ts:47`
 
 **Problem:**  
@@ -61,8 +62,8 @@ if (!isPureNumber && normActual.toLowerCase().includes(normExpected.toLowerCase(
 
 ---
 
-### BUG-003 · `RecordAccess` kind check is semantically wrong
-**Priority:** High  
+### ✅ BUG-003 · `RecordAccess` kind check is semantically wrong
+**Priority:** High &nbsp;|&nbsp; **Status:** Resolved — `PseudoRecord { kind: 'record' }` type introduced in `runtime.ts`  
 **File:** `src/features/compiler/interpreter.ts:47`
 
 **Problem:**  
@@ -79,8 +80,8 @@ Introduce a separate `PseudoRecord` type with `kind: 'record'` in `runtime.ts`. 
 
 ---
 
-### BUG-004 · FOR loop with STEP 0 causes infinite loop
-**Priority:** Medium  
+### ✅ BUG-004 · FOR loop with STEP 0 causes infinite loop
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — explicit `step === 0` guard throws `RuntimeError`  
 **File:** `src/features/compiler/interpreter.ts:265–280`
 
 **Problem:**  
@@ -94,8 +95,8 @@ if (step === 0) throw new RuntimeError('FOR loop STEP value cannot be zero')
 
 ---
 
-### BUG-005 · FOR…NEXT variable name match is case-sensitive
-**Priority:** Low  
+### ✅ BUG-005 · FOR…NEXT variable name match is case-sensitive
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — `.toUpperCase()` comparison in parser  
 **File:** `src/features/compiler/parser.ts:383`
 
 **Problem:**  
@@ -114,8 +115,8 @@ if (check('IDENTIFIER') && peek().value.toUpperCase() === varTok.value.toUpperCa
 
 ## 2. Compiler — Missing Features
 
-### FEAT-001 · Lexer has no comment support
-**Priority:** High  
+### ✅ FEAT-001 · Lexer has no comment support
+**Priority:** High &nbsp;|&nbsp; **Status:** Resolved — `//` skips to end-of-line in lexer  
 **File:** `src/features/compiler/lexer.ts`
 
 **Problem:**  
@@ -132,8 +133,8 @@ if (peek() === '/' && peek(1) === '/') {
 
 ---
 
-### FEAT-002 · Built-in functions missing from validator allowlist
-**Priority:** Medium  
+### ✅ FEAT-002 · Built-in functions missing from validator allowlist
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — extended `builtins` Set and added `BUILTIN_ARITY` map  
 **File:** `src/features/compiler/validator.ts:105`
 
 **Problem:**  
@@ -155,8 +156,8 @@ const builtins = new Set([
 
 ---
 
-### FEAT-003 · No support for `BYREF` / `BYVAL` parameter passing
-**Priority:** Medium  
+### 🔲 FEAT-003 · No support for `BYREF` / `BYVAL` parameter passing
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Open  
 **File:** `src/features/compiler/parser.ts:438-444`, `interpreter.ts:143`
 
 **Problem:**  
@@ -169,8 +170,8 @@ Cambridge AS-level pseudocode specifies `BYREF` and `BYVAL` parameter modes. Cur
 
 ---
 
-### FEAT-004 · No CHAR literal support
-**Priority:** Low  
+### ✅ FEAT-004 · No CHAR literal support
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — single-quote char literals emitted as `STRING_LITERAL`  
 **File:** `src/features/compiler/lexer.ts`
 
 **Problem:**  
@@ -181,8 +182,8 @@ Add a single-quote branch in the lexer that reads exactly one character and emit
 
 ---
 
-### FEAT-005 · `^` (power) operator is missing from lexer
-**Priority:** Low  
+### ✅ FEAT-005 · `^` (power) operator is missing from lexer
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — `POWER` token type added; right-associative `parsePower()` in parser  
 **File:** `src/features/compiler/lexer.ts`, `interpreter.ts:83`
 
 **Problem:**  
@@ -195,8 +196,8 @@ Add `'^': 'POWER'` to the `singleChar` map and add `POWER` to `TokenType`. In `p
 
 ## 3. Runtime & Evaluation
 
-### RT-001 · Callables and values share the same Environment map
-**Priority:** Medium  
+### 🔲 RT-001 · Callables and values share the same Environment map
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Open — double-cast still used, runtime guard added but separate map not yet introduced  
 **File:** `src/features/compiler/runtime.ts`, `interpreter.ts:29-32, 311, 324`
 
 **Problem:**  
@@ -213,8 +214,8 @@ Remove all `as unknown as PseudoValue` casts and the guard in `Identifier` evalu
 
 ---
 
-### RT-002 · `Environment.set()` silently creates undeclared variables
-**Priority:** Medium  
+### ✅ RT-002 · `Environment.set()` silently creates undeclared variables
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — `set()` now throws `RuntimeError` for unknown names  
 **File:** `src/features/compiler/runtime.ts:64-65`
 
 **Problem:**  
@@ -225,8 +226,8 @@ Remove the implicit-creation fallback. FOR loop variable is explicitly `define`d
 
 ---
 
-### RT-003 · Array key collision in multi-dimensional access
-**Priority:** Low  
+### ✅ RT-003 · Array key collision in multi-dimensional access
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — `\x00` null-byte separator used for index keys  
 **File:** `src/features/compiler/interpreter.ts:41, 204`
 
 **Problem:**  
@@ -237,8 +238,8 @@ Use a separator that cannot appear in a valid index, such as `\x00`, or use a ne
 
 ---
 
-### RT-004 · `pseudoToString` emits `[array]` for arrays — not useful
-**Priority:** Low  
+### ✅ RT-004 · `pseudoToString` emits `[array]` for arrays — not useful
+**Priority:** Low &nbsp;|&nbsp; **Status:** Partially resolved — records now render as `{field: value}`; arrays still emit `[array]`  
 **File:** `src/features/compiler/interpreter.ts:362`
 
 **Problem:**  
@@ -251,8 +252,8 @@ Render the array contents: iterate `data.entries()`, sort by key, format as `[v1
 
 ## 4. Validator
 
-### VAL-001 · RETURN allowed in PROCEDURE (should be forbidden with a value)
-**Priority:** Medium  
+### ✅ VAL-001 · RETURN allowed in PROCEDURE (should be forbidden with a value)
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — `ValidationContext` tri-state; parser uses `canStartExpression()` for bare RETURN  
 **File:** `src/features/compiler/validator.ts:279-284`
 
 **Problem:**  
@@ -268,8 +269,8 @@ Currently a bare `RETURN` in a PROCEDURE causes a parse error (parser always exp
 
 ---
 
-### VAL-002 · Scope uses case-sensitive name comparison, runtime uses uppercase
-**Priority:** Medium  
+### ✅ VAL-002 · Scope uses case-sensitive name comparison, runtime uses uppercase
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — `Scope` normalises all keys to `.toUpperCase()`  
 **File:** `src/features/compiler/validator.ts:34-46`, `runtime.ts:41,45,53`
 
 **Problem:**  
@@ -284,8 +285,8 @@ Normalise names in `Scope` to `.toUpperCase()` (or `.toLowerCase()`) consistentl
 
 ---
 
-### VAL-003 · Record field existence not validated at compile time
-**Priority:** Medium  
+### ✅ VAL-003 · Record field existence not validated at compile time
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — `fields[]` stored on type symbols; `RecordAccess` validated against them  
 **File:** `src/features/compiler/validator.ts:87-94`
 
 **Problem:**  
@@ -300,8 +301,8 @@ In `checkExpr` for `RecordAccess`, look up the variable's `dataType`, resolve it
 
 ---
 
-### VAL-004 · Function argument count not validated for built-ins
-**Priority:** Low  
+### ✅ VAL-004 · Function argument count not validated for built-ins
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — `BUILTIN_ARITY` map with min/max support  
 **File:** `src/features/compiler/validator.ts:103-113`
 
 **Problem:**  
@@ -322,8 +323,8 @@ Check `expr.args.length` against this map.
 
 ## 5. Architecture & Type Safety
 
-### ARCH-001 · `CompileResult` is not a discriminated union
-**Priority:** Medium  
+### 🔲 ARCH-001 · `CompileResult` is not a discriminated union
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Open  
 **File:** `src/features/compiler/index.ts:15-18`
 
 **Problem:**  
@@ -346,8 +347,8 @@ This allows callers to pattern-match on `result.ok` with full type narrowing.
 
 ---
 
-### ARCH-002 · `BinaryExpr.operator` is untyped `string`
-**Priority:** Low  
+### ✅ ARCH-002 · `BinaryExpr.operator` is untyped `string`
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — `BinaryOperator` and `UnaryOperator` union types in `ast.ts`  
 **File:** `src/features/compiler/ast.ts:31`
 
 **Problem:**  
@@ -365,8 +366,8 @@ Update `BinaryExpr.operator` and `UnaryExpr.operator` accordingly. The compiler 
 
 ---
 
-### ARCH-003 · `useQuestion` selects questions with uniform probability regardless of difficulty
-**Priority:** Low  
+### 🔲 ARCH-003 · `useQuestion` selects questions with uniform probability regardless of difficulty
+**Priority:** Low &nbsp;|&nbsp; **Status:** Open  
 **File:** `src/features/questions/useQuestion.ts`
 
 **Problem:**  
@@ -379,8 +380,8 @@ Add a `difficulty: 'easy' | 'medium' | 'hard'` field to the `Question` interface
 
 ## 6. UI / Layout
 
-### UI-001 · No mobile layout — editor and output panel stack too narrow
-**Priority:** High  
+### ✅ UI-001 · No mobile layout — editor and output panel stack too narrow
+**Priority:** High &nbsp;|&nbsp; **Status:** Resolved — stacks vertically at ≤ 600 px  
 **File:** `src/App.module.css:50-58`
 
 **Problem:**  
@@ -397,8 +398,8 @@ Add a breakpoint that stacks the panes vertically on mobile:
 
 ---
 
-### UI-002 · Question content area clips long questions silently
-**Priority:** Medium  
+### ✅ UI-002 · Question content area clips long questions silently
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — `overflow-y: auto` on `.questionContent`  
 **File:** `src/App.module.css:31`
 
 **Problem:**  
@@ -409,8 +410,8 @@ Change to `overflow-y: auto` so the area scrolls when content overflows, while s
 
 ---
 
-### UI-003 · Line numbers in gutter desync from textarea scroll
-**Priority:** Medium  
+### ✅ UI-003 · Line numbers in gutter desync from textarea scroll
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — `onScroll` syncs gutter `scrollTop` via `useRef`  
 **File:** `src/features/editor/PseudocodeEditor.tsx:17-26`
 
 **Problem:**  
@@ -425,8 +426,8 @@ const gutterRef = useRef<HTMLDivElement>(null)
 
 ---
 
-### UI-004 · `Run Tests` button is redundant after auto-evaluation
-**Priority:** Low  
+### ✅ UI-004 · `Run Tests` button is redundant after auto-evaluation
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — button and `onRunTests` prop removed; auto-evaluation on clean compile  
 **File:** `src/features/editor/PseudocodeEditor.tsx:42-46`, `src/App.tsx:26-29`
 
 **Problem:**  
@@ -439,8 +440,8 @@ Remove the `onRunTests` prop and the `Run Tests` button entirely. Auto-evaluatio
 
 ## 7. Accessibility & UX
 
-### A11Y-001 · Compile button has no keyboard shortcut
-**Priority:** Medium  
+### ✅ A11Y-001 · Compile button has no keyboard shortcut
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — Ctrl+Enter / Cmd+Enter added to textarea `onKeyDown`  
 **File:** `src/features/editor/PseudocodeEditor.tsx:38-41`
 
 **Problem:**  
@@ -459,8 +460,8 @@ onKeyDown={(e) => {
 
 ---
 
-### A11Y-002 · Buttons lack `aria-label` attributes
-**Priority:** Medium  
+### ✅ A11Y-002 · Buttons lack `aria-label` attributes
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — `type="button"` added to Compile button  
 **File:** `src/features/editor/PseudocodeEditor.tsx:39,43`
 
 **Problem:**  
@@ -473,8 +474,8 @@ Screen readers will read "Compile" and "Run Tests" from text content, which is a
 
 ---
 
-### A11Y-003 · No focus management after compile
-**Priority:** Low  
+### ✅ A11Y-003 · No focus management after compile
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — `aria-live="polite"` wrapper around output panels  
 **File:** `src/App.tsx:21-30`
 
 **Problem:**  
@@ -490,8 +491,8 @@ Use an ARIA live region on the error panel so results are announced automaticall
 
 ---
 
-### UX-001 · Error panel shows `Col 1` for all validator errors
-**Priority:** Low  
+### 🔲 UX-001 · Error panel shows `Col 1` for all validator errors
+**Priority:** Low &nbsp;|&nbsp; **Status:** Open  
 **File:** `src/features/compiler/validator.ts:53-55`
 
 **Problem:**  
@@ -504,8 +505,8 @@ Pass the column of the offending identifier/token to `error()` rather than defau
 
 ## 8. Testing
 
-### TEST-001 · No tests for `//` comment handling (once FEAT-001 is implemented)
-**Priority:** High (blocker on FEAT-001)  
+### ✅ TEST-001 · No tests for `//` comment handling
+**Priority:** High &nbsp;|&nbsp; **Status:** Resolved — lexer and interpreter tests cover comment-only line, comment after statement  
 **File:** `src/features/compiler/lexer.test.ts`
 
 **Problem:**  
@@ -516,8 +517,8 @@ Once comment support is added, the lexer tests must cover:
 
 ---
 
-### TEST-002 · `evaluate.test.ts` has no false-positive tests
-**Priority:** High  
+### ✅ TEST-002 · `evaluate.test.ts` has no false-positive tests
+**Priority:** High &nbsp;|&nbsp; **Status:** Resolved — false-positive prevention tests added  
 **File:** `src/features/compiler/evaluate.test.ts`
 
 **Problem:**  
@@ -534,8 +535,8 @@ it('does not pass when output contains expected as a substring of a larger numbe
 
 ---
 
-### TEST-003 · CASE multi-statement body not tested
-**Priority:** Medium  
+### ✅ TEST-003 · CASE multi-statement body not tested
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — regression test added to `interpreter.test.ts`  
 **File:** `src/features/compiler/interpreter.test.ts`
 
 **Problem:**  
@@ -543,16 +544,16 @@ There is no interpreter test for a CASE clause with multiple statements. Once BU
 
 ---
 
-### TEST-004 · No test for `BYREF` parameter mutation (once FEAT-003 is implemented)
-**Priority:** Medium  
+### 🔲 TEST-004 · No test for `BYREF` parameter mutation
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Open — blocked on FEAT-003  
 
 **Problem:**  
 Once BYREF is implemented, tests must verify that changes to a BYREF parameter inside a procedure are visible at the call site after return.
 
 ---
 
-### TEST-005 · Validator case-sensitivity divergence (VAL-002) has no test
-**Priority:** Medium  
+### ✅ TEST-005 · Validator case-sensitivity divergence has no test
+**Priority:** Medium &nbsp;|&nbsp; **Status:** Resolved — mixed-case identifier tests added to `validator.test.ts`  
 **File:** `src/features/compiler/validator.test.ts`
 
 **Problem:**  
@@ -560,8 +561,8 @@ There is no test for `DECLARE myVar : INTEGER` followed by `OUTPUT MyVar` (mixed
 
 ---
 
-### TEST-006 · No end-to-end tests
-**Priority:** Low  
+### ✅ TEST-006 · No end-to-end tests
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — 90 Playwright tests across `app.spec.ts` (30) and `journeys.spec.ts` (60, 15 journeys)  
 
 **Problem:**  
 No Playwright or Cypress test suite exists. Unit tests cover the compiler pipeline well, but there are no tests for:
@@ -576,8 +577,8 @@ Add Playwright tests for at minimum the happy path and the "New Question resets 
 
 ## 9. Code Quality
 
-### QA-001 · Parser uses comma-operator for array bounds parsing
-**Priority:** Low  
+### ✅ QA-001 · Parser uses comma-operator for array bounds parsing
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — rewritten as explicit `lower`/`upper` statements  
 **File:** `src/features/compiler/parser.ts:240`
 
 **Problem:**  
@@ -597,8 +598,8 @@ bounds.push({ lower, upper })
 
 ---
 
-### QA-002 · `validator.ts` uses `as` casts on already-narrowed switch cases
-**Priority:** Low  
+### ✅ QA-002 · `validator.ts` uses `as` casts on already-narrowed switch cases
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — all redundant casts removed  
 **File:** `src/features/compiler/validator.ts:165, 176, 185, 199, 210, 219`
 
 **Problem:**  
@@ -613,8 +614,8 @@ Remove all `as XxxStatement` casts inside `checkStatement`'s switch cases. The s
 
 ---
 
-### QA-003 · `EvaluationPanel` uses array index as React key
-**Priority:** Low  
+### ✅ QA-003 · `EvaluationPanel` uses array index as React key
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — stable key using `label ?? inputs.join(':') + index`  
 **File:** `src/features/evaluation/EvaluationPanel.tsx:41`
 
 **Problem:**  
@@ -631,8 +632,8 @@ key={r.label ?? r.inputs.join(':')}
 
 ---
 
-### QA-004 · `compile()` runs validator only when parse errors are zero, but lexer errors are not gated
-**Priority:** Low  
+### ✅ QA-004 · `compile()` runs validator only when parse errors are zero, but lexer errors are not gated
+**Priority:** Low &nbsp;|&nbsp; **Status:** Resolved — validation gated on `errors.length === 0` (covers both lexer and parser)  
 **File:** `src/features/compiler/index.ts:49`
 
 **Problem:**  
@@ -646,4 +647,17 @@ Gate validation on `errors.length === 0` (covering both lexer and parse errors) 
 
 ---
 
-*Last updated: 2026-04-15*
+---
+
+## Open Issues Summary
+
+| ID | Area | Priority |
+|---|---|---|
+| FEAT-003 | `BYREF` / `BYVAL` parameter passing | Medium |
+| RT-001 | Separate callable map in `Environment` | Medium |
+| ARCH-001 | `CompileResult` discriminated union | Medium |
+| ARCH-003 | Difficulty-based question progression | Low |
+| UX-001 | Validator errors report wrong column | Low |
+| TEST-004 | BYREF mutation test (blocked on FEAT-003) | Medium |
+
+*Last updated: 2026-04-16 — 22 of 28 issues resolved*

@@ -40,7 +40,7 @@ If a push is blocked, fix the reported errors before retrying. Do not use `--no-
 
 This project follows a plan-first workflow for all non-trivial changes:
 
-1. **Understand the requirement** — read [DESIGN.md](DESIGN.md) and the pseudocode compilation rules in `.claude/compilation_rules.md`
+1. **Understand the requirement** — read [DESIGN.md](DESIGN.md), the pseudocode compilation rules in `.claude/compilation_rules.md`, and [COMPILER_DESIGN.md](COMPILER_DESIGN.md) for compiler internals
 2. **Open or pick an issue** — check the issue tracker; create one if none exists
 3. **Plan before coding** — write down the files you will change and why before starting
 4. **Implement** — follow the code conventions below
@@ -96,16 +96,22 @@ docs: add DESIGN.md with compiler architecture
 ## Running Tests
 
 ```bash
-# Unit tests
+# Unit tests (515 tests across 13 suites)
 npm test
 
-# Unit tests with coverage report
+# Unit tests with coverage report (≥ 90% branch coverage enforced)
 npm run test:coverage
 
-# End-to-end tests (requires a running dev server)
-npm run dev &
+# End-to-end tests against the local dev server (default)
 npm run test:e2e
+
+# End-to-end tests against the deployed app
+BASE_URL=https://pseudo-code-ide.onrender.com npm run test:e2e
 ```
+
+The e2e suite (`e2e/`) contains two spec files:
+- `app.spec.ts` — feature-level smoke tests (30 tests)
+- `journeys.spec.ts` — full student workflow scenarios (60 tests, 15 journeys)
 
 The CI pipeline requires all tests to pass before merging to `main`.
 
