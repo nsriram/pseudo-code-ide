@@ -9,6 +9,8 @@ A browser-based IDE for Cambridge AS Level Computer Science students to practise
 
 **[Try it live →](https://pseudo-code-ide.onrender.com)**
 
+![Pseudocode IDE](images/pseudo-code-ide.jpg)
+
 ---
 
 ## Features
